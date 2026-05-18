@@ -1,0 +1,23 @@
+task_name: ""
+task_type: "report_writing"
+
+language: "zh"
+final_format: "docx"
+
+has_template: false
+template_filename: ""
+
+python_env: ""
+
+allow_web: false
+allow_modify_input: false
+
+style_requirements: ""
+citation_requirements: ""
+special_instructions: ""
+
+problem_dir: "input/problems"
+reference_dir: "input/references"
+template_dir: "input/template"
+work_dir: "work"
+output_dir: "output"

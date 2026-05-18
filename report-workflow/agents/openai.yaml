@@ -1,0 +1,4 @@
+interface:
+  display_name: "Report Workflow"
+  short_description: "Initialize and run standardized report-writing projects."
+  default_prompt: "Use the report-workflow skill in this directory."
