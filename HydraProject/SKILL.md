@@ -20,6 +20,7 @@ The installed skill directory only contains stable skill rules and bundled resou
 
 ```text
 <PROJECT_ROOT>/CodexWorkspace/
+  README.md
   references/
   checklists/
   snippets/
@@ -44,7 +45,28 @@ If these directories do not exist, create them. This is project setup, not a use
 
 Do not write task state, decisions, work logs, project memory, or experiment notes into the installed skill directory unless the user explicitly asks to modify the skill itself.
 
+## Language Policy
+
+Use Chinese for descriptive project outputs by default.
+
+This applies to:
+
+- `CodexWorkspace/README.md`;
+- task summaries;
+- work logs;
+- decision notes;
+- project memory;
+- reference notes;
+- checklists;
+- final explanations to the user.
+
+Keep code, commands, paths, config keys, class names, function names, API names, log snippets, and exact error messages in their original language when that preserves correctness.
+
 ## Project Files
+
+Human-facing overview:
+
+- `<PROJECT_AGENT_HOME>/README.md`: explains what each workspace file is for and where the user's attention should go.
 
 Short-lived task files:
 
@@ -82,9 +104,10 @@ Required:
 
 1. Locate `<PROJECT_ROOT>`.
 2. Create `<PROJECT_AGENT_HOME>` and subdirectories if missing.
-3. Locate the active task file: user-specified file first, then `<TASK_HOME>/Instructions.md`, then compatible project history files if present.
-4. Locate the active done file: user-specified record first, then `<TASK_HOME>/Done.md`, then compatible project history files if present.
-5. Refresh `Current.md`, `Decision.md`, and `Worklog.md`.
+3. Create `<PROJECT_AGENT_HOME>/README.md` if missing. It must explain the workspace layout, which files are user-facing, which files are mostly for the agent, and what the user should check after each task.
+4. Locate the active task file: user-specified file first, then `<TASK_HOME>/Instructions.md`, then compatible project history files if present.
+5. Locate the active done file: user-specified record first, then `<TASK_HOME>/Done.md`, then compatible project history files if present.
+6. Refresh `Current.md`, `Decision.md`, and `Worklog.md`.
 
 Do not edit code before the active task and done files are understood.
 
