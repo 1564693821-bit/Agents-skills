@@ -2,28 +2,7 @@
 
 ## Identify Template Format
 
-Inspect `task_config.yaml`, `input/template/`, `input/problems/`, and `input/references/` to identify the template format: Markdown, DOCX, PDF, LaTeX, spreadsheet, presentation, plain text, or another format. If `template_filename` is set, prioritize that file.
-
-A template may live outside `input/template/`. Treat a problem or reference file as a template-like source when it is an answer sheet, lab handout with answer spaces, rubric document to be filled, partially completed report, or required document shell.
-
-## Create a Working Template Copy
-
-Before editing any template or template-like source, copy it out of `input/` and into a writable working area:
-
-```text
-work/assets/template_working/
-```
-
-Preferred helper: run `scripts/prepare_working_template.py <project-root>` from this skill when the template can be found from `task_config.yaml`. If the helper cannot identify the file, choose the source manually and still place the copy under `work/assets/template_working/`.
-
-Rules:
-
-- Preserve the original filename when practical, or use a clearly related name such as `<stem>.working.<ext>`.
-- Record the original input path and working-copy path in `work/notes.md`.
-- Perform all in-place template edits on the working copy only.
-- Keep temporary conversion products beside the working copy or in `work/assets/`, not in `output/`.
-- Export or copy only the finished deliverable into `output/`.
-- If the working copy already exists from a previous run, reuse it only when it matches the current source and intended edits; otherwise create a fresh working copy and record the choice.
+Inspect `task_config.yaml` and `input/template/` to identify the template format: Markdown, DOCX, PDF, LaTeX, spreadsheet, presentation, plain text, or another format. If `template_filename` is set, prioritize that file.
 
 ## Separate Template Shell From Existing Content
 
@@ -39,13 +18,21 @@ Before generating the final report:
 
 ## Preserve the Original
 
-Never edit the original template in `input/` directly. Copy the template to `work/assets/template_working/` and edit that working copy. The final file in `output/` should normally be produced from the edited working copy.
-
-Do not rebuild a document from scratch merely because `input/` is read-only. Read-only input is solved by copying the file into `work/`, not by discarding the template structure.
+Never edit the original template in `input/template/` directly. Copy the template to `output/` or generate a new final file based on it.
 
 ## Preserve Structure
 
-Preserve section order, headings, styles, numbering, captions, tables, required fields, and placeholders where appropriate. Replace placeholders with final content only after drafting answers in `work/draft.md`.
+Preserve section order, headings, styles, numbering, captions, tables, required fields, and placeholders. Replace placeholders with final content only after drafting answers in `work/draft.md`.
+
+The default behavior is template filling, not redesign. Replace only the content that must change: placeholder text, old/sample answers, metadata values, figure/table slots, and required answer blocks. Keep the surrounding template shell unchanged.
+
+Do not change the template's font sizes, font families, run styles, paragraph styles, line spacing, paragraph spacing, alignment, margins, page size, section breaks, headers/footers, heading style definitions, numbering style, caption style, or table style unless:
+
+- The user explicitly requests that formatting change.
+- The template cannot fit or display required content without a minimal local adjustment.
+- The available tooling cannot preserve that formatting.
+
+Any exception must be recorded in `work/checks.md` with the affected element and reason.
 
 Do not substantially redesign the template. Keep the template's layout and visual conventions unless:
 
@@ -53,7 +40,9 @@ Do not substantially redesign the template. Keep the template's layout and visua
 - The template format cannot be edited with available tools.
 - The template structure prevents the required answers from fitting correctly.
 
-When exact in-place editing is possible, replace old content within the working template shell rather than creating a new document from scratch. When exact in-place editing is not possible, recreate the closest possible structure and record the limitation in `work/checks.md`.
+When exact in-place editing is possible, replace old content within the existing styled template shell rather than creating a new document from scratch. When exact in-place editing is not possible, recreate the closest possible structure and record the limitation in `work/checks.md`.
+
+For DOCX templates, preserve the style of the paragraph, run, table cell, heading, or caption that receives replacement content. If replacing text through a library, avoid operations that rebuild the whole document with default styles. If a placeholder spans multiple runs, replace the minimum necessary runs and keep the original formatting of the placeholder container.
 
 ## Preserve Sub-Question Granularity
 
@@ -72,8 +61,9 @@ Rules:
 
 When the template is DOCX or the final output is DOCX:
 
-- Prefer editing the copied DOCX package in `work/assets/template_working/` or using a DOCX library against that working copy.
 - Reuse the template's defined styles for title, headings, body text, captions, tables, headers, and footers whenever possible.
+- For a DOCX template, reuse means preserving the actual existing styles and formatting, not approximating them with a new default Word document.
+- Do not globally redefine styles, normalize fonts, resize headings, change margins, alter line spacing, or rebuild section layout unless the user requested redesign or a technical limitation is recorded.
 - If the template lacks usable styles, create a restrained academic/report layout rather than inventing a decorative design.
 - Keep margins, page size, header/footer placement, and section breaks stable unless they make the report unreadable.
 - Use consistent heading levels that mirror the problem hierarchy and preserve sub-question labels.
@@ -106,6 +96,8 @@ Place generated figures, tables, processed images, and reusable assets in `work/
 
 If exact manipulation is not possible because of file format or tooling limits, produce the closest possible final report and record the limitation in `work/checks.md`.
 
+Tooling limitations do not permit silent redesign. If the tool cannot preserve a template's formatting, state what changed and why in `work/checks.md`.
+
 ## Final Output
 
-Save only final deliverables in `output/`. Do not place temporary conversion files or scratch files there. The working template copy and all intermediate edited versions belong in `work/assets/template_working/`.
+Save only final deliverables in `output/`. Do not place temporary conversion files or scratch files there.

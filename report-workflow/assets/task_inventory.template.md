@@ -17,9 +17,31 @@ Create one item per required sub-question. Do not combine items such as `(a)-(c)
 - Source file:
 - Original prompt:
 - Required output:
+- Required artifacts:
+  - Code/commands:
+  - Formulas/derivations:
+  - Figures/tables:
+  - Numerical results:
+  - Verification:
+  - Citations/references:
+  - Discussion:
+- Final artifact map:
+  - Code/commands location:
+  - Formulas/derivations location:
+  - Figures/tables location:
+  - Numerical results location:
+  - Verification location:
+  - Discussion location:
+- Figure/table plan:
+  - Filename or table id:
+  - Purpose:
+  - Source data/code:
+  - Expected axes/columns:
+  - Caption intent:
 - Relevant references:
 - Needed computation/code:
 - Needed figure/table:
+- Final report location:
 - Potential pitfalls:
 - Status: pending
 
@@ -28,8 +50,30 @@ Create one item per required sub-question. Do not combine items such as `(a)-(c)
 - Source file:
 - Original prompt:
 - Required output:
+- Required artifacts:
+  - Code/commands:
+  - Formulas/derivations:
+  - Figures/tables:
+  - Numerical results:
+  - Verification:
+  - Citations/references:
+  - Discussion:
+- Final artifact map:
+  - Code/commands location:
+  - Formulas/derivations location:
+  - Figures/tables location:
+  - Numerical results location:
+  - Verification location:
+  - Discussion location:
+- Figure/table plan:
+  - Filename or table id:
+  - Purpose:
+  - Source data/code:
+  - Expected axes/columns:
+  - Caption intent:
 - Relevant references:
 - Needed computation/code:
 - Needed figure/table:
+- Final report location:
 - Potential pitfalls:
 - Status: pending

@@ -10,7 +10,13 @@ Use the same separate sub-question labels as `work/task_inventory.md`. Do not me
 
 ### Computation / Derivation
 
+### Code / Commands
+
+### Figure / Table Notes
+
 ### Final Result
+
+### Interpretation
 
 ### Verification
 
@@ -24,7 +30,13 @@ Use the same separate sub-question labels as `work/task_inventory.md`. Do not me
 
 ### Computation / Derivation
 
+### Code / Commands
+
+### Figure / Table Notes
+
 ### Final Result
+
+### Interpretation
 
 ### Verification
 

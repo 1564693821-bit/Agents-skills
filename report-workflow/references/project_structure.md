@@ -42,11 +42,7 @@ Writable folder for scripts used during analysis, computation, parsing, conversi
 
 ## `work/assets/`
 
-Writable folder for generated figures, tables, processed data, temporary exports, copied working templates, and other intermediate assets.
-
-## `work/assets/template_working/`
-
-Writable working area for copies of templates or template-like source documents from `input/`. Edit these copies in place, not the originals. Final deliverables are exported or copied from here to `output/`.
+Writable folder for generated figures, tables, processed data, temporary exports, and other intermediate assets.
 
 ## `output/`
 
@@ -55,5 +51,5 @@ Final-only folder. Store final deliverables here and avoid temporary files.
 ## Boundary Summary
 
 - `input/` is read-only.
-- `work/` is writable and stores intermediate artifacts, including editable copies of templates.
+- `work/` is writable and stores intermediate artifacts.
 - `output/` is final-only.
