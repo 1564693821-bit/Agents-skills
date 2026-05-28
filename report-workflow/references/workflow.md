@@ -237,6 +237,8 @@ Required actions:
 - Put shared setup, common definitions, or common code before the sub-question answers only when it improves readability; still provide a separate answer for every sub-question.
 - Include restatement, solution, derivation or computation, final result, verification, and final-report notes.
 - Include a clear result, conclusion, proof endpoint, or artifact reference for each sub-question. Do not make a sub-question depend on a neighboring subsection for its answer.
+- Write formulas in LaTeX source form in the draft. Use consistent inline delimiters for short formulas and display delimiters for important equations.
+- Keep variable definitions, units, assumptions, and equation references close to the formulas they explain.
 - For template-backed paraphrase/rewrite tasks, draft at comparable depth to the template. Expand procedure, analysis, discussion, appendix notes, and table explanations enough that important detail is not lost.
 - Keep internal transformation notes out of final-report draft text. They may appear in "Notes for Final Report" only as instructions to yourself, and must not be copied into the final deliverable.
 - Mark incomplete items clearly in draft and notes.
@@ -251,8 +253,35 @@ Common mistakes:
 - Leaving unsupported or unverified draft claims.
 - Hiding several sub-question answers inside a single paragraph or exercise-level summary.
 - Drafting an abridged report when the task requested a detailed paraphrase or template-faithful rewrite.
+- Mixing raw plain-text math, screenshots, and LaTeX without a recorded tool limitation.
 
-## Phase 9: Computation and Asset Generation
+## Phase 9: Content-First Review and Draft Revision
+
+Goal: Make the report content correct and complete before layout decisions.
+
+Inputs: `work/task_inventory.md`, `work/notes.md`, `work/draft.md`, references, computations, and required assets.
+
+Outputs: Updated content-review section in `work/checks.md` and revised `work/draft.md`.
+
+Required actions:
+
+- Review every inventory item against the draft before final report generation.
+- Check coverage, reasoning, derivations, computations, assumptions, citations, units, notation, figures, tables, and final-answer targets.
+- Check that each formula has a LaTeX source form and that notation is consistent.
+- Revise `work/draft.md` for content defects before doing final layout or template placement.
+- Record unresolved content limitations in `work/checks.md`.
+
+Stop conditions:
+
+- Do not move to layout or final generation until the content review passes, unless a limitation is recorded and the user has accepted the risk or the limitation is unavoidable.
+
+Common mistakes:
+
+- Polishing layout before the answers are complete.
+- Treating a clean-looking final document as correct without checking derivations and coverage.
+- Rewriting content during layout in ways that change results or omit assumptions.
+
+## Phase 10: Computation and Asset Generation
 
 Goal: Run reproducible calculations or produce assets when needed.
 
@@ -276,9 +305,9 @@ Common mistakes:
 - Claiming code ran when it did not.
 - Storing temporary files in `output/`.
 
-## Phase 10: Final Report Generation
+## Phase 11: Layout Pass and Final Report Generation
 
-Goal: Create the final deliverable.
+Goal: Convert checked content into a readable final deliverable.
 
 Inputs: `work/task_inventory.md`, `work/notes.md`, `work/draft.md`, templates, assets.
 
@@ -288,6 +317,7 @@ Required actions:
 
 - Save final deliverables only under `output/`.
 - Use configured `final_format` when feasible.
+- Start from content that has already passed the content-first review.
 - Preserve template requirements when applicable.
 - If using a template, edit the copy in `work/assets/template_working/` and then save/copy the completed deliverable to `output/`.
 - If using a populated template, keep its layout, section order, styles, fields, and caption conventions as stable as possible while replacing old answer content.
@@ -295,9 +325,14 @@ Required actions:
 - Maintain template information density. Include equivalent figures, tables, appendices, formulas, logs/data listings, and explanatory paragraphs unless omission is requested or justified in `work/checks.md`.
 - Keep prompt/process metadata out of final prose. Do not write transformation rules, data-adjustment rules, local source paths, "source report", "processed", "baseline", "as requested", or tool notes into the final report unless they are assignment content.
 - Use headings or labels that keep every required sub-question visibly separated in the final report.
+- Choose layout after content is correct: use paragraphs for explanations and analysis, lists for parallel discrete points, tables for structured comparison or repeated values, and display equation blocks for important formulas.
+- Remove rough-draft bullet clutter. Merge one-item lists, fragmented bullets, and non-parallel list items into coherent paragraphs when prose is clearer.
+- Avoid deep nested lists unless the source structure requires them. Do not hide reasoning inside cramped bullets or table cells.
+- For Markdown and LaTeX output, preserve formulas as LaTeX with consistent delimiters.
+- For DOCX output, use the LaTeX source from the draft to create Word-compatible equations or another clean rendered formula form when feasible. Do not rely on Word to automatically convert raw LaTeX text.
 - For DOCX output, use a polished academic/report layout: clean A4 page setup, consistent margins, readable body font, stable heading styles, restrained spacing, numbered captions where needed, and no decorative or random layout choices.
 - For DOCX output, use Word-compatible equations where possible. If native equations are not feasible, use consistent readable linear math and record the limitation.
-- For DOCX output, important equations should be displayed cleanly on their own line; do not leave raw LaTeX in the final document unless the user explicitly requested raw LaTeX text.
+- For DOCX output, important equations should be displayed cleanly on their own line; do not leave raw `$...$`, `$$...$$`, `\(...\)`, `\[...\]`, or LaTeX commands in the final document unless the user explicitly requested LaTeX source text.
 - Ensure every final section maps to inventory.
 - Remove internal notes and placeholders.
 
@@ -315,8 +350,10 @@ Common mistakes:
 - Replacing detailed appendices/logs/tables with a short summary.
 - Creating a new blank document when the copied working template could be edited.
 - Producing a DOCX with inconsistent fonts, ugly spacing, unstyled headings, unreadable formulas, or screenshot formulas when an editable equation was feasible.
+- Leaving the draft's rough bullet structure unchanged when it makes the final report harder to read.
+- Pasting LaTeX source into DOCX and assuming Word will convert it automatically.
 
-## Phase 11: Correctness Checking
+## Phase 12: Correctness Checking
 
 Goal: Verify content accuracy and completeness.
 
@@ -329,6 +366,7 @@ Required actions:
 - Check every question and sub-question.
 - Confirm each sub-question has a separately visible answer in the final report.
 - Verify assumptions, reasoning, units, notation, computations, figures, tables, and citations.
+- Verify formulas against the LaTeX source in the draft and check that no formula was dropped, mistranscribed, or replaced by vague prose.
 - For template-backed reports, compare the final deliverable against the template fidelity map. Check that sections, figures, tables, appendices, formulas, logs/data listings, captions, and depth/detail are preserved or explicitly accounted for.
 - For appendices/logs/tables, compare row counts, column meanings, and coverage against the template/reference. Summaries are insufficient when the source contains detailed raw or tabular material and the user requested detail preservation.
 - Record known limitations.
@@ -342,7 +380,7 @@ Common mistakes:
 - Treating formatting review as correctness review.
 - Ignoring pitfalls already listed in notes.
 
-## Phase 12: Formatting Checking
+## Phase 13: Formatting Checking
 
 Goal: Verify deliverable presentation.
 
@@ -354,6 +392,7 @@ Required actions:
 
 - Confirm final file exists in `output/`.
 - Check headings, numbering, equations, captions, citations, template preservation, and absence of TODO/FIXME/placeholders.
+- Check layout choices after content correctness: lists are parallel and purposeful, paragraphs carry explanations cleanly, tables improve readability, and equation blocks are readable.
 - Search or inspect the final deliverable for prompt/meta leakage: prompt wording, "paraphrase", "source report", "baseline source", "processed", "offset", "as requested", data-adjustment rules, local paths, and tool/process notes.
 - If a template was used, confirm the final file keeps the template's main structure and that old content was stripped or intentionally retained with a reason recorded in `work/notes.md`.
 - If wide appendices or data tables are present, use readable formatting such as landscape pages, smaller but legible fonts, repeated headers, or split tables rather than dropping columns.
@@ -370,8 +409,9 @@ Common mistakes:
 - Missing captions or inconsistent numbering.
 - Passing checks without a prompt/meta leakage scan.
 - Allowing appendices or logs to become less detailed than the template/reference without recording a user-approved reason.
+- Overusing bullets because the draft used bullets, even when paragraph prose would be clearer.
 
-## Phase 13: Final Summary
+## Phase 14: Final Summary
 
 Goal: Leave a durable completion record.
 
@@ -397,7 +437,7 @@ Common mistakes:
 - Omitting limitations.
 - Reporting success without file paths.
 
-## Phase 14: Task-End Retrospective and Skill Integration
+## Phase 15: Task-End Retrospective and Skill Integration
 
 Goal: Convert real failures, user corrections, and near-misses from a completed report task into durable improvements to this skill.
 

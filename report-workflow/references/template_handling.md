@@ -48,6 +48,8 @@ Do not rebuild a document from scratch merely because `input/` is read-only. Rea
 
 Preserve section order, headings, styles, numbering, captions, tables, required fields, and placeholders where appropriate. Replace placeholders with final content only after drafting answers in `work/draft.md`.
 
+Do not use template placement as the first writing pass. First draft and review the content in `work/draft.md`; then place the checked content into the copied template and adjust layout.
+
 Do not substantially redesign the template. Keep the template's layout and visual conventions unless:
 
 - The user explicitly asks for a redesign.
@@ -107,24 +109,30 @@ When the template is DOCX or the final output is DOCX:
 - Prefer editing the copied DOCX package in `work/assets/template_working/` or using a DOCX library against that working copy.
 - Reuse the template's defined styles for title, headings, body text, captions, tables, headers, and footers whenever possible.
 - If the template lacks usable styles, create a restrained academic/report layout rather than inventing a decorative design.
+- Apply layout after the content review passes. The DOCX pass should organize checked content; it should not be the moment where missing answers or weak derivations are first discovered.
 - Keep margins, page size, header/footer placement, and section breaks stable unless they make the report unreadable.
 - Use consistent heading levels that mirror the problem hierarchy and preserve sub-question labels.
 - Keep body text readable, normally 10.5-12 pt, with consistent paragraph spacing and line spacing.
+- Use paragraphs for explanations, methods, and analysis; use lists only for parallel steps, conditions, observations, or deliverables; use tables for repeated structured values or comparisons.
+- Remove excessive fragmented bullets, one-item lists, and non-parallel lists introduced during drafting.
 - Avoid random text boxes, floating shapes, excessive colors, inconsistent fonts, oversized headings, and manual blank-line spacing.
 - Use readable tables with header rows, sensible column widths, consistent borders, and no clipped text.
 - Use numbered captions for figures and tables when present.
 
-## DOCX Formula Rules
+## Formula Rules
 
-When formulas are present in DOCX output:
+Use LaTeX as the formula source of truth during drafting and checking.
 
-- Prefer native Word-compatible equation objects or a reliable conversion from LaTeX to Word equations.
+- In Markdown and LaTeX final outputs, keep formulas in LaTeX with consistent inline and display delimiters.
+- In DOCX final outputs, prefer native Word-compatible equation objects or a reliable conversion from LaTeX to Word equations.
+- Do not assume Word will automatically transform raw LaTeX delimiters into equations. The agent must explicitly convert, render, or choose a documented fallback.
 - Display important equations on their own line with consistent alignment.
 - Keep inline formulas short and readable.
-- Do not leave raw LaTeX commands in the final DOCX unless the user explicitly requested raw LaTeX text.
+- Do not leave raw `$...$`, `$$...$$`, `\(...\)`, `\[...\]`, or LaTeX commands in the final DOCX unless the user explicitly requested raw LaTeX text, but keep the LaTeX source in `work/draft.md` or `work/notes.md` for traceability.
 - Use plain-text math only when native equations are not feasible, and record the limitation in `work/checks.md`.
 - Use equation images only as a last resort. If used, they must be high-resolution, readable, and aligned with the surrounding text.
 - Keep notation, units, subscripts, superscripts, fractions, matrices, vectors, and significant figures consistent.
+- Check that no formula block from the template or draft was omitted, mistranscribed, or replaced by a vague prose summary.
 
 ## Required Sections Without Matching Answers
 

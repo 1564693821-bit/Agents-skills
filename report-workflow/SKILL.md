@@ -108,11 +108,14 @@ When the project is initialized, execute the workflow in this exact order:
 6. Create or update `work/task_inventory.md`.
 7. Create or update `work/notes.md`.
 8. Draft answers in `work/draft.md`.
-9. Use Python/code only if helpful or required.
-10. Edit the working-template copy in `work/assets/template_working/` and export/copy the finished deliverable to `output/`.
-11. Perform correctness check in `work/checks.md`.
-12. Perform formatting check in `work/checks.md`.
-13. Write final summary in `work/checks.md`.
+9. Run a content-first review in `work/checks.md`: coverage, correctness, derivations, computations, citations, assumptions, notation, and formula source.
+10. Revise `work/draft.md` until the content review passes.
+11. Use Python/code only if helpful or required.
+12. Apply the layout pass: decide headings, paragraph flow, lists, tables, equation display, captions, and template placement after content is already correct.
+13. Edit the working-template copy in `work/assets/template_working/` and export/copy the finished deliverable to `output/`.
+14. Perform final correctness check in `work/checks.md`.
+15. Perform formatting check in `work/checks.md`.
+16. Write final summary in `work/checks.md`.
 
 Hard requirements:
 
@@ -121,6 +124,8 @@ Hard requirements:
 - Do not rebuild a template-backed report from scratch when the source template can be copied and edited.
 - Do not edit an `input/` file directly; copy the template/source document into `work/assets/template_working/` first and modify that working copy.
 - Create or update `work/checks.md` before completion.
+- Treat report writing as two passes: content first, layout second. Do not optimize bulleting, spacing, table layout, DOCX styling, or visual polish until the draft content has passed coverage and correctness review.
+- Preserve a LaTeX source form for formulas during drafting and checking. Use LaTeX delimiters for formulas only in Markdown/LaTeX outputs. For DOCX, LaTeX is an intermediate source only: convert it into native/compatible Word equations or another clean rendered formula form before final delivery.
 - Make every final answer section traceable to exactly one item in `work/task_inventory.md`, unless it is a report-level section such as title page, objective, summary, or references.
 - Do not merge multiple requested sub-questions into one answer section. If the source asks for `3.4(a)(b)(c)`, create separate inventory items, draft sections, and final report sections for `3.4(a)`, `3.4(b)`, and `3.4(c)`.
 - Do not hide sub-question answers inside a single paragraph, table cell, or broad section. A reader must be able to visually locate the answer to each sub-question by its original label.
@@ -225,6 +230,35 @@ Each required sub-question must have its own draft subsection. Do not write comb
 
 For each sub-question draft subsection, include a short final-answer target such as result, conclusion, proof endpoint, or required artifact. Do not rely on a neighboring subsection to carry the answer.
 
+Formula drafting requirements:
+
+- Write formulas in LaTeX source form in `work/draft.md`.
+- Use inline math delimiters such as `$...$` for short formulas and display delimiters such as `$$...$$` or `\(...\)`/`\[...\]` consistently according to the final format.
+- Keep equation labels, variable definitions, units, and derivation steps close to the formulas they support.
+- Do not assume Word will automatically convert raw LaTeX delimiters into equations. If the final format is DOCX, explicitly convert or render the LaTeX draft formulas during final generation.
+- Do not mix ad hoc plain-text math, screenshots, and LaTeX-derived formulas in the same final report unless a tool limitation forces it and the limitation is recorded in `work/checks.md`.
+
+# Content-First Review and Layout Planning
+
+Before final report generation or template placement, perform a content-first review in `work/checks.md` and revise `work/draft.md` until it passes.
+
+Content review must check:
+
+- Every inventory item has a complete draft answer.
+- Each answer directly addresses the prompt and has a visible final result, conclusion, proof endpoint, or required artifact.
+- Reasoning, derivations, computations, citations, assumptions, units, notation, figures, and tables are correct and sufficient.
+- Formulas have a LaTeX source form and consistent notation.
+- No internal prompt/config/process language has entered final-facing prose.
+
+Only after the content review passes, perform the layout pass. The layout pass must improve readability without changing meaning:
+
+- Convert rough draft structure into appropriate headings, paragraphs, lists, tables, equation blocks, captions, and appendices.
+- Use bullet or numbered lists only when items are parallel, discrete, and easier to scan than prose.
+- Avoid excessive fragmented bullets, one-item lists, deeply nested lists, and lists that hide reasoning that should be a paragraph.
+- Prefer paragraphs for explanations, methods, and analysis; prefer tables for comparisons, parameters, datasets, or repeated structured results.
+- Keep sub-question labels visible even when combining shared setup text.
+- Record any layout compromise caused by template or tooling limits in `work/checks.md`.
+
 # Computation and Python Rules
 
 Use code only when it improves correctness, reproducibility, data processing, calculations, figure generation, or format conversion. Place scripts in `work/code/` and generated intermediate assets in `work/assets/`. Record commands run, outputs relied on, and limitations in `work/notes.md` or `work/checks.md`. Do not claim a computation was run unless it actually completed successfully.
@@ -248,6 +282,8 @@ For template-backed paraphrase or rewrite tasks:
 
 Generate the final report only after `work/task_inventory.md` and `work/draft.md` are updated. Save final deliverables under `output/` using the configured `final_format` when feasible. Ensure every final section maps back to `work/task_inventory.md`.
 
+Do not begin final formatting from an unreviewed draft. First complete the content-first review, revise content issues in `work/draft.md`, then apply the layout pass to produce the final deliverable.
+
 Before writing final prose, separate report content from process metadata. Report content includes experiment objectives, methods, results, analysis, conclusions, citations, appendices, and required answers. Process metadata includes prompt wording, transformation instructions, "paraphrase" requests, data-adjustment rules, tool limitations, file paths, and source/template labels. Process metadata belongs in `work/notes.md` and `work/checks.md`, not in `output/`.
 
 For template-backed reports, the normal final-generation path is:
@@ -260,6 +296,14 @@ For template-backed reports, the normal final-generation path is:
 Only create a new document from scratch when the template cannot be edited with available tools, the format is unsupported, or the user explicitly asks for a rebuilt document. Record that limitation in `work/checks.md`.
 
 In the final report, preserve sub-question granularity from the inventory and draft. A combined high-level exercise introduction is allowed, but answers must still appear under separate headings or labels for each required sub-question.
+
+Final formula requirements:
+
+- Markdown and LaTeX final outputs must keep formulas as LaTeX with consistent inline and display delimiters.
+- DOCX final outputs must not show raw `$...$`, `$$...$$`, `\(...\)`, `\[...\]`, or LaTeX commands as ordinary text unless the user explicitly requested LaTeX source text.
+- DOCX final outputs should be produced from the LaTeX source equations in the draft and converted to Word-compatible equation objects when feasible.
+- If conversion is not feasible, choose the most readable fallback allowed by the requested format and record the limitation in `work/checks.md`.
+- Never silently replace formulas with vague prose summaries.
 
 ## DOCX Output Standards
 
@@ -286,6 +330,7 @@ DOCX sub-question layout requirements:
 DOCX equation and formula standards:
 
 - Use standard Word-compatible equation formatting when possible, such as OMML equations produced by a DOCX library, MathType-compatible objects, or a reliable conversion from LaTeX.
+- Treat LaTeX in the draft as the equation source of truth, then convert or render it consistently for the DOCX. The final Word document should look like a polished report with displayed equations, not a LaTeX source file pasted into Word.
 - If native equation objects are not feasible, use clean linear math notation consistently and record the limitation in `work/checks.md`.
 - Display important equations on their own line, centered or consistently indented, with optional equation numbers aligned consistently when needed.
 - Keep inline formulas short and readable. Do not paste raw, unrendered LaTeX into the final DOCX unless the user explicitly requested LaTeX source text.
@@ -305,11 +350,15 @@ Update `work/checks.md` with coverage and correctness checks. Verify that every 
 
 Explicitly check that no required sub-question was merged into a neighboring answer or hidden inside a broad exercise summary.
 
+Before layout work, explicitly record that the content-first review passed or list the remaining content fixes. Do not treat a visually polished report as complete while content issues remain.
+
 For template-backed reports, explicitly compare final report structure against the template fidelity inventory. Any missing section, figure, table, appendix, log/data listing, formula block, or substantial explanation is a correctness issue unless the omission is requested or recorded with a reason.
 
 # Formatting Check
 
 Update `work/checks.md` with formatting checks. Verify the final file exists under `output/`, template formatting is preserved when applicable, headings and numbering are consistent, figures/tables have captions when needed, equations are readable, citations are consistent, and no TODO/FIXME/placeholders/internal notes remain.
+
+Check whether the layout choices are appropriate for the content: lists should be purposeful and parallel, explanatory paragraphs should not be chopped into bullets, tables should not be used to hide long reasoning, and equation blocks should remain readable.
 
 When a template was used, check that the final report preserves the template's main structure and styles and that old template content has been replaced or intentionally retained with a recorded reason.
 

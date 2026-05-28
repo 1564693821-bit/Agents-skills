@@ -23,11 +23,20 @@
 - Assumptions are stated.
 - Units are consistent.
 - Notation is consistent.
+- Formulas have a LaTeX source form in the draft or notes.
+- Important equations, derivations, and formula references were checked against that LaTeX source.
 - Computations are reproducible.
 - Tables and figures match text.
 - Claims are supported by references where required.
 - Template-backed rewrites preserve the source template's expected detail level, not just its headings.
 - Appendix/log/table row counts, column meanings, and coverage are comparable to the source template or reference material.
+
+## Content-First Review
+
+- Content coverage and correctness were reviewed before final layout or template placement.
+- Content defects found during review were fixed in `work/draft.md` before polishing layout.
+- Final layout changes did not alter results, remove assumptions, weaken derivations, or hide sub-question answers.
+- Any unavoidable content limitation was recorded in `work/checks.md` before completion.
 
 ## Pitfall Check
 
@@ -48,6 +57,10 @@
 - Headings consistent.
 - Sub-question headings or labels remain visible and separate.
 - Equations readable.
+- Markdown/LaTeX final outputs use LaTeX delimiters consistently for formulas.
+- Lists are purposeful, parallel, and not overused.
+- Explanatory content is written as coherent paragraphs rather than fragmented bullets where prose is clearer.
+- Tables are used for structured comparison or repeated values, not to hide long reasoning in cramped cells.
 - Captions present.
 - Citations consistent.
 - No TODO/FIXME/placeholders.
@@ -75,8 +88,10 @@ Use this section when the final deliverable contains formulas or equations.
 
 - Important equations are displayed on their own line and aligned consistently.
 - Inline formulas are short and readable.
+- Equations were generated or checked from LaTeX source in the draft/notes.
 - Word-compatible equation objects are used where feasible.
-- Raw LaTeX is not left in the final DOCX unless the user explicitly requested raw LaTeX text.
+- Raw LaTeX delimiters or commands are not left as ordinary text in the final DOCX unless the user explicitly requested raw LaTeX text.
+- The DOCX was inspected for pasted LaTeX source such as `$...$`, `$$...$$`, `\(...\)`, or `\[...\]`.
 - Plain-text math or image equations are used only when native equations are not feasible, and the limitation is recorded.
 - Equation images, if unavoidable, are high-resolution, aligned with surrounding text, and not blurry.
 - Notation, units, subscripts, superscripts, fractions, vectors, matrices, and significant figures are consistent.

@@ -26,5 +26,7 @@ The agent will:
 5. Create task inventory.
 6. Record notes, pitfalls, ambiguities, and assumptions.
 7. Draft answers.
-8. Generate final report.
-9. Check correctness and formatting.
+8. Review content correctness and revise the draft.
+9. Apply layout, formula rendering, and template placement.
+10. Generate final report.
+11. Check final correctness and formatting.

@@ -20,10 +20,19 @@
 - [ ] Reasoning is complete.
 - [ ] Computations are reproducible.
 - [ ] Units and notation are consistent.
+- [ ] Formulas have LaTeX source in `work/draft.md` or `work/notes.md`.
+- [ ] Important equations and derivations were checked against the LaTeX source.
 - [ ] Figures and tables match the report.
 - [ ] Pitfalls in `work/notes.md` were reviewed.
 - [ ] Template-backed rewrites preserve the expected detail level, not just the headings.
 - [ ] Appendix/log/table row counts, columns, and coverage are comparable to the source template or reference.
+
+## Content-First Review
+
+- [ ] Content coverage and correctness were reviewed before layout/template polishing.
+- [ ] Content defects found during review were fixed in `work/draft.md`.
+- [ ] Layout changes did not alter results, remove assumptions, weaken derivations, or hide sub-question answers.
+- [ ] Unavoidable content limitations are recorded here before completion.
 
 ## Formatting Check
 
@@ -36,6 +45,12 @@
 - [ ] Sub-question headings or labels remain visible and separate.
 - [ ] Figures and tables have captions if needed.
 - [ ] Equations are readable.
+- [ ] Markdown/LaTeX outputs use consistent LaTeX delimiters for formulas.
+- [ ] DOCX outputs do not show raw LaTeX delimiters or commands as ordinary text unless explicitly requested.
+- [ ] DOCX equations were converted/rendered from LaTeX source where feasible, or the fallback is recorded in Known limitations.
+- [ ] Lists are purposeful, parallel, and not overused.
+- [ ] Explanations and analysis are coherent paragraphs rather than fragmented bullets where prose is clearer.
+- [ ] Tables are used for structured values/comparisons, not to hide long reasoning in cramped cells.
 - [ ] Citations/references are consistent if used.
 - [ ] No TODO, FIXME, placeholder, or internal note remains.
 - [ ] No prompt/meta leakage remains in the final report, including prompt wording, transformation rules, data-adjustment rules, local paths, tool notes, or phrases such as "source report", "processed", "offset", "baseline", or "as requested".
