@@ -2,7 +2,28 @@
 
 ## Identify Template Format
 
-Inspect `task_config.yaml` and `input/template/` to identify the template format: Markdown, DOCX, PDF, LaTeX, spreadsheet, presentation, plain text, or another format. If `template_filename` is set, prioritize that file.
+Inspect `task_config.yaml`, `input/template/`, `input/problems/`, and `input/references/` to identify the template format: Markdown, DOCX, PDF, LaTeX, spreadsheet, presentation, plain text, or another format. If `template_filename` is set, prioritize that file.
+
+A template may live outside `input/template/`. Treat a problem or reference file as a template-like source when it is an answer sheet, lab handout with answer spaces, rubric document to be filled, partially completed report, or required document shell.
+
+## Create a Working Template Copy
+
+Before editing any template or template-like source, copy it out of `input/` and into a writable working area:
+
+```text
+work/assets/template_working/
+```
+
+Preferred helper: run `scripts/prepare_working_template.py <project-root>` from this skill when the template can be found from `task_config.yaml`. If the helper cannot identify the file, choose the source manually and still place the copy under `work/assets/template_working/`.
+
+Rules:
+
+- Preserve the original filename when practical, or use a clearly related name such as `<stem>.working.<ext>`.
+- Record the original input path and working-copy path in `work/notes.md`.
+- Perform all in-place template edits on the working copy only.
+- Keep temporary conversion products beside the working copy or in `work/assets/`, not in `output/`.
+- Export or copy only the finished deliverable into `output/`.
+- If the working copy already exists from a previous run, reuse it only when it matches the current source and intended edits; otherwise create a fresh working copy and record the choice.
 
 ## Separate Template Shell From Existing Content
 
@@ -12,27 +33,20 @@ Before generating the final report:
 
 - Identify reusable structure: title page fields, section order, headings, table layout, styles, numbering, figure/table caption style, headers/footers, and required boilerplate.
 - Identify old content: previous answers, previous code, previous figures, previous conclusions, old dates, old experiment names, and sample filler text.
+- Identify fidelity-critical content: section depth, long explanations, formulas, figures, tables, appendices, logs, data listings, captions, and repeated answer patterns that must be preserved or replaced at a comparable level of detail.
 - Record the separation in `work/notes.md`, including which template fields should be retained and which old content must be replaced.
 - Use old content only when it is generic boilerplate or still correct for the new report. Record the reason when old content is intentionally retained.
 - If the distinction between reusable structure and old content is ambiguous and materially affects the final report, ask the user.
 
 ## Preserve the Original
 
-Never edit the original template in `input/template/` directly. Copy the template to `output/` or generate a new final file based on it.
+Never edit the original template in `input/` directly. Copy the template to `work/assets/template_working/` and edit that working copy. The final file in `output/` should normally be produced from the edited working copy.
+
+Do not rebuild a document from scratch merely because `input/` is read-only. Read-only input is solved by copying the file into `work/`, not by discarding the template structure.
 
 ## Preserve Structure
 
-Preserve section order, headings, styles, numbering, captions, tables, required fields, and placeholders. Replace placeholders with final content only after drafting answers in `work/draft.md`.
-
-The default behavior is template filling, not redesign. Replace only the content that must change: placeholder text, old/sample answers, metadata values, figure/table slots, and required answer blocks. Keep the surrounding template shell unchanged.
-
-Do not change the template's font sizes, font families, run styles, paragraph styles, line spacing, paragraph spacing, alignment, margins, page size, section breaks, headers/footers, heading style definitions, numbering style, caption style, or table style unless:
-
-- The user explicitly requests that formatting change.
-- The template cannot fit or display required content without a minimal local adjustment.
-- The available tooling cannot preserve that formatting.
-
-Any exception must be recorded in `work/checks.md` with the affected element and reason.
+Preserve section order, headings, styles, numbering, captions, tables, required fields, and placeholders where appropriate. Replace placeholders with final content only after drafting answers in `work/draft.md`.
 
 Do not substantially redesign the template. Keep the template's layout and visual conventions unless:
 
@@ -40,9 +54,38 @@ Do not substantially redesign the template. Keep the template's layout and visua
 - The template format cannot be edited with available tools.
 - The template structure prevents the required answers from fitting correctly.
 
-When exact in-place editing is possible, replace old content within the existing styled template shell rather than creating a new document from scratch. When exact in-place editing is not possible, recreate the closest possible structure and record the limitation in `work/checks.md`.
+When exact in-place editing is possible, replace old content within the working template shell rather than creating a new document from scratch. When exact in-place editing is not possible, recreate the closest possible structure and record the limitation in `work/checks.md`.
 
-For DOCX templates, preserve the style of the paragraph, run, table cell, heading, or caption that receives replacement content. If replacing text through a library, avoid operations that rebuild the whole document with default styles. If a placeholder spans multiple runs, replace the minimum necessary runs and keep the original formatting of the placeholder container.
+## Preserve Information Density
+
+For template-backed paraphrase, rewrite, or "use this report as the base" tasks, the template is both a style source and a coverage source. Do not summarize away detail.
+
+Required actions:
+
+- Create a template fidelity map in `work/task_inventory.md` or `work/notes.md` before final generation.
+- Map each source section, subsection, figure, table, appendix, formula block, code/log/data listing, and repeated answer pattern to a final report location.
+- Match the template's level of detail unless the user explicitly requests a shorter report. A detailed procedure should remain a detailed procedure; a full appendix/log should remain a full appendix/log; a multi-row table should remain a multi-row table.
+- If a source appendix/table/log is too wide for the final format, adjust layout using landscape pages, smaller readable font, split tables, or repeated headers. Do not drop columns or rows simply to make formatting easier.
+- If exact preservation is impossible because of tool limits or unreadable source content, record the limitation in `work/checks.md` and preserve the closest readable equivalent.
+
+Blocking issues:
+
+- A final report that has the right section names but much less content than the template is incomplete.
+- A final appendix that replaces a detailed reference/log/table with selected rows or a narrative summary is incomplete unless the user requested an abridgement.
+- Missing captions, missing figure/table numbers, missing appendix columns, or missing log rows are formatting or coverage errors depending on severity.
+
+## Keep Process Metadata Out of the Final Report
+
+Task instructions guide the work but are not report content. Do not put prompt wording, transformation instructions, data-adjustment rules, "paraphrase" requests, local file paths, "source report", "baseline source", "processed", "offset", "as requested", tool limitations, or internal assumptions into the final deliverable unless the assignment explicitly asks for a methods note about them.
+
+Allowed locations for process metadata:
+
+- `work/notes.md`
+- `work/checks.md`
+- comments inside scripts under `work/code/`
+- final assistant response when summarizing limitations
+
+Final-report language should read like a natural report in the requested discipline. If values are adjusted, anonymized, normalized, or transformed per configuration, present the final values as ordinary report results and keep the transformation rule internal.
 
 ## Preserve Sub-Question Granularity
 
@@ -61,9 +104,8 @@ Rules:
 
 When the template is DOCX or the final output is DOCX:
 
+- Prefer editing the copied DOCX package in `work/assets/template_working/` or using a DOCX library against that working copy.
 - Reuse the template's defined styles for title, headings, body text, captions, tables, headers, and footers whenever possible.
-- For a DOCX template, reuse means preserving the actual existing styles and formatting, not approximating them with a new default Word document.
-- Do not globally redefine styles, normalize fonts, resize headings, change margins, alter line spacing, or rebuild section layout unless the user requested redesign or a technical limitation is recorded.
 - If the template lacks usable styles, create a restrained academic/report layout rather than inventing a decorative design.
 - Keep margins, page size, header/footer placement, and section breaks stable unless they make the report unreadable.
 - Use consistent heading levels that mirror the problem hierarchy and preserve sub-question labels.
@@ -92,12 +134,17 @@ If the template has required sections but no matching answer, record the issue i
 
 Place generated figures, tables, processed images, and reusable assets in `work/assets/`. Insert or reference them properly in the final report. Captions and numbering must match the text.
 
+For template-backed reports, compare figure/table coverage against the template:
+
+- Same conceptual figure/table should appear unless replaced by a better equivalent.
+- Tables should preserve required columns and row coverage.
+- Raw logs, Fourier tables, appendices, code listings, and data sheets should remain detailed when the template/reference is detailed.
+- Wide technical tables may use landscape layout or smaller readable text; layout pressure is not a reason to omit data.
+
 ## Tooling Limitations
 
 If exact manipulation is not possible because of file format or tooling limits, produce the closest possible final report and record the limitation in `work/checks.md`.
 
-Tooling limitations do not permit silent redesign. If the tool cannot preserve a template's formatting, state what changed and why in `work/checks.md`.
-
 ## Final Output
 
-Save only final deliverables in `output/`. Do not place temporary conversion files or scratch files there.
+Save only final deliverables in `output/`. Do not place temporary conversion files or scratch files there. The working template copy and all intermediate edited versions belong in `work/assets/template_working/`.

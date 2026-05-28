@@ -1,6 +1,6 @@
 ---
 name: report-workflow
-description: A self-initializing report-writing workflow. Use this skill when the user wants Codex to create or use a standardized report project for homework reports, experiment reports, course reports, technical reports, or template-based answer files. On first use, the skill detects whether the current directory is initialized; if not, it creates input/, work/, output/, task_config.yaml, and starter files, then stops. On later use, it reads problems, references, templates, drafts answers, generates the final report, and performs correctness and formatting checks.
+description: A self-initializing report-writing workflow. Use this skill when the user wants Codex to create or use a standardized report project for homework reports, experiment reports, course reports, technical reports, or template-based answer files. On first use, the skill detects whether the current directory is initialized; if not, it creates input/, work/, output/, task_config.yaml, and starter files, then stops. On later use, it reads problems, references, templates, drafts answers, generates the final report, and performs correctness and formatting checks. Also use this skill when the user says a report task is finished or "任务结束" and wants problems from the task summarized, presented, and folded back into this report-workflow skill.
 ---
 
 # Purpose
@@ -9,6 +9,7 @@ Use this skill to manage a standardized report-writing project from initializati
 
 - First-run initialization mode: create the project structure and starter files, then stop.
 - Report-writing mode: read configuration, problems, references, and templates; inventory tasks; draft answers; generate the final report; and check correctness and formatting.
+- Task-end retrospective mode: when the user says `任务结束` or asks to reflect on the completed report task, summarize task problems first, present them to the user, then integrate approved lessons into this skill's existing logic.
 
 Load detailed runbooks from `references/` only as needed:
 
@@ -80,6 +81,21 @@ Next steps:
 5. Invoke this skill again to write the report.
 ```
 
+# Task-End Retrospective Mode
+
+Use this mode when the user says `任务结束`, says the report task is finished, or asks to summarize problems from the current task and update the skill.
+
+Rules:
+
+- First summarize the issues for the user before editing skill files.
+- The summary must include: problem, impact, root cause, preventive rule, and the target section/file where the rule should live.
+- If the user only asks for a summary or says `任务结束`, stop after the summary and ask whether to apply the proposed skill updates.
+- If the user explicitly asks to summarize and then apply changes in the same request, present the summary first in a visible message, then edit the skill.
+- Integrate lessons into this `report-workflow` skill. Do not create a separate retrospective skill unless the user explicitly requests a separate skill.
+- Update the existing logical locations rather than appending disconnected lessons: core rules in `SKILL.md`, detailed steps in `references/workflow.md`, template-specific behavior in `references/template_handling.md`, validation rules in `references/quality_checklist.md`, and starter checks in `assets/` when future initialized projects should inherit them.
+- Avoid duplicate or contradictory instructions. Strengthen the existing rule in place when possible.
+- Validate the skill update by searching modified files for stale wording, duplicate headings, obvious placeholders, and missing cross-layer checks.
+
 # Report-Writing Mode
 
 When the project is initialized, execute the workflow in this exact order:
@@ -88,40 +104,32 @@ When the project is initialized, execute the workflow in this exact order:
 2. Scan `input/problems/`.
 3. Scan `input/references/`.
 4. Scan `input/template/` if `has_template` is true or template files exist.
-5. Create or update `work/task_inventory.md`.
-6. Create or update `work/notes.md`.
-7. Draft answers in `work/draft.md`.
-8. Use Python/code only if helpful or required.
-9. Generate the final report in `output/`.
-10. Perform correctness check in `work/checks.md`.
-11. Perform formatting check in `work/checks.md`.
-12. Write final summary in `work/checks.md`.
+5. If a template or template-like source document will be used, copy it into a working-template area under `work/assets/template_working/` before editing.
+6. Create or update `work/task_inventory.md`.
+7. Create or update `work/notes.md`.
+8. Draft answers in `work/draft.md`.
+9. Use Python/code only if helpful or required.
+10. Edit the working-template copy in `work/assets/template_working/` and export/copy the finished deliverable to `output/`.
+11. Perform correctness check in `work/checks.md`.
+12. Perform formatting check in `work/checks.md`.
+13. Write final summary in `work/checks.md`.
 
 Hard requirements:
 
 - Do not write the final report before creating or updating `work/task_inventory.md`.
 - Do not write the final report before drafting answers in `work/draft.md`.
+- Do not rebuild a template-backed report from scratch when the source template can be copied and edited.
+- Do not edit an `input/` file directly; copy the template/source document into `work/assets/template_working/` first and modify that working copy.
 - Create or update `work/checks.md` before completion.
 - Make every final answer section traceable to exactly one item in `work/task_inventory.md`, unless it is a report-level section such as title page, objective, summary, or references.
 - Do not merge multiple requested sub-questions into one answer section. If the source asks for `3.4(a)(b)(c)`, create separate inventory items, draft sections, and final report sections for `3.4(a)`, `3.4(b)`, and `3.4(c)`.
 - Do not hide sub-question answers inside a single paragraph, table cell, or broad section. A reader must be able to visually locate the answer to each sub-question by its original label.
 - Shared setup, shared definitions, or shared derivations may appear once before related sub-questions, but the answer, result, and verification for each sub-question must remain under that sub-question's own label.
 - Preserve the original problem numbering and sub-question labels in headings wherever possible.
+- Treat configuration and user instructions as internal process rules unless the user explicitly asks them to appear in the final report. Do not leak phrases such as paraphrase instructions, data-adjustment instructions, "source report", "processed", "baseline", "as requested", or similar workflow/meta language into the final deliverable.
+- For template-backed paraphrase or rewrite tasks, preserve the template's information density: section order, figures, tables, appendices, logs, formulas, captions, and important explanatory detail must be matched or deliberately replaced, not summarized away.
+- If an appendix, table, code listing, log, or data sheet appears in the template or required references, recreate an equivalent level of detail in the final report. Do not replace a full appendix/log/table with a short summary unless the user explicitly asks for an abridged report.
 - Save the final report under `output/`.
-- Style requirements, including requests such as "simple", "concise", "clean", or "brief", may only affect wording density and visual restraint. They must never remove required problem statements, code, derivations, formulas, figures, tables, verification, citations, or any deliverable named in the prompt or inventory.
-- When a template is used, treat the task as filling the template, not redesigning it. Preserve the template's existing styles, font sizes, font families, margins, spacing, heading definitions, numbering, headers/footers, captions, tables, placeholders, and section order unless the user explicitly asks to redesign them or exact preservation is technically impossible.
-- If exact template formatting cannot be preserved, record the specific limitation in `work/checks.md`; do not silently substitute a newly styled document.
-
-Observed failure prevention requirements:
-
-- Build an artifact traceability matrix before final generation. For every inventory item, record whether code, commands, formulas, derivations, numerical outputs, figures/tables, verification, and discussion are required, where they are drafted, and where they appear in the final report.
-- Code required by a prompt must appear under the corresponding sub-question in the final report. A consolidated appendix is allowed only as a supplement, not as a replacement for per-question code.
-- Plot- or image-heavy tasks require a figure plan before generation. The plan must map each figure filename to exactly one sub-question unless a shared figure is explicitly justified in `work/notes.md`.
-- Do not reuse the same figure for multiple sub-questions unless the source prompt explicitly asks for one shared figure or the reuse is documented and clearly correct.
-- Generated figures must be semantically checked against their captions, code, axes, legends, source data, and the sub-question prompt. Duplicate filenames, duplicate captions, repeated images, stale images, or figures showing the wrong quantity are blocking errors.
-- Explanations must be deep enough to answer the question, interpret the output, and connect the result to the relevant theory. A report is incomplete if it contains only code and figures without interpretation, even when all artifacts are present.
-- When a reference or peer report is provided, compare it against the primary problem statement and theory before adopting its content. Record differences and decide which source is authoritative.
-- For DOCX outputs, verify both visible content and package hygiene: the number of visible figure captions, embedded images, image relationships, and media files should agree unless a documented template artifact requires otherwise.
 
 # Required Project Structure
 
@@ -151,6 +159,8 @@ Rules:
 - Do not modify original problem files.
 - Do not modify original reference files.
 - Do not modify original template files in place.
+- It is allowed and preferred to modify copies of input templates or template-like source documents after they have been copied into `work/assets/template_working/`.
+- If a problem or reference file is actually the required answer sheet/template, treat it as a template-like source: copy it to `work/assets/template_working/`, preserve its structure, edit the copy, then save the completed deliverable under `output/`.
 - Do not write temporary files to `output/`.
 - Do not write final reports outside `output/`.
 - Do not delete intermediate files unless explicitly instructed.
@@ -184,26 +194,11 @@ Read `task_config.yaml` before scanning inputs. Respect these keys:
 
 If configuration is missing or ambiguous, record the issue in `work/notes.md` and proceed only when a reasonable assumption is safe. If a required decision would change the final answer materially, ask the user.
 
-Interpret `style_requirements` as presentation guidance only. For example, requests for a concise, simple, clean, or minimal style mean concise prose and restrained formatting; they do not permit omitting required code listings, calculations, derivations, plots, explanations, checks, or sub-question answers.
+Configuration privacy rule: `special_instructions`, style notes, transformation rules, anonymization rules, data-adjustment rules, and internal tool choices guide the work but are not report content. Record them in `work/notes.md` or `work/checks.md`, never in the final deliverable, unless the user explicitly requests disclosure.
 
 # Reading Phase
 
 Read problem files from `problem_dir`, reference files from `reference_dir`, and templates from `template_dir` only when configured or present. Preserve source filenames and paths in notes. If a file format cannot be read, record the limitation in `work/notes.md` and `work/checks.md`.
-
-Source priority:
-
-- Primary problem files define the required questions and deliverables.
-- Course handouts, rubrics, and explicit user instructions outrank peer reports, old reports, solution examples, and generated drafts.
-- Reference books and official course materials are used to interpret and verify the primary problem statement.
-- Peer reports or previous submissions are comparison material, not the task source, unless the user explicitly says to copy their structure or content.
-- If a peer report includes extra sub-questions not present in the primary problem file, record the difference and do not add those questions to the final report without user approval.
-- If a peer report disagrees with the primary problem file, theory, or reproducible computation, record the disagreement and prefer the primary problem file plus verified theory/computation.
-
-Reference comparison requirements:
-
-- When a peer/example report is supplied, create or update a comparison note in `work/` that lists differences in problem coverage, code approach, figure coverage, numerical results, and conclusions.
-- For code-driven or plot-driven disagreements, run an independent calculation when feasible and record the numerical evidence.
-- Do not treat visual similarity to a peer report as proof of correctness. Check whether the plot is required, distinct, labeled correctly, and generated from the right data.
 
 # Task Inventory Phase
 
@@ -217,10 +212,6 @@ Sub-question granularity is mandatory:
 - If the exact text of a sub-question cannot be read, record that item separately with the unreadability limitation instead of merging it into a neighboring question.
 - If a problem has multiple required products under one label, such as a derivation, a plot, a table, and a discussion, keep them tied to that label but list each product explicitly in the inventory item.
 - Before final generation, compare the inventory labels against the final report headings or visible labels. Any missing label is a blocking formatting error.
-- For each inventory item, explicitly list required artifacts such as code, commands, formulas, derivations, figures, tables, numerical outputs, verification, discussion, and citations. If none are required, state that explicitly.
-- For each inventory item, include a final-report artifact map with planned locations for code, figures/tables, formulas/derivations, numerical outputs, verification, and discussion. Use `not required` only after checking the prompt.
-- For each planned figure/table, include a short purpose statement, expected axes or columns, source data/code, and the sub-question label it supports.
-- Before final generation, verify that every listed required artifact appears in `work/draft.md`. Missing required artifacts are a blocking correctness error, even if the requested style is concise.
 
 # Notes, Pitfalls, and Ambiguities Phase
 
@@ -234,59 +225,41 @@ Each required sub-question must have its own draft subsection. Do not write comb
 
 For each sub-question draft subsection, include a short final-answer target such as result, conclusion, proof endpoint, or required artifact. Do not rely on a neighboring subsection to carry the answer.
 
-Completeness overrides brevity. If the user asks for a concise style, compress wording after all required content is present; do not omit code, equations, derivation steps needed for correctness, generated figures/tables, or verification required by the problem.
-
-Depth requirements:
-
-- For computational questions, include the setup, method, code or command, result, and interpretation of the result.
-- For figure questions, explain what the figure shows and how it answers the prompt. A caption alone is not enough.
-- For proof or derivation questions, include enough intermediate steps to make the conclusion auditable.
-- For comparison questions, explicitly state the comparison criteria and the conclusion.
-- For listening, visual, or qualitative tasks, describe the observed result and connect it to the relevant mathematical property.
-
 # Computation and Python Rules
 
 Use code only when it improves correctness, reproducibility, data processing, calculations, figure generation, or format conversion. Place scripts in `work/code/` and generated intermediate assets in `work/assets/`. Record commands run, outputs relied on, and limitations in `work/notes.md` or `work/checks.md`. Do not claim a computation was run unless it actually completed successfully.
 
-Computation validation requirements:
-
-- For every generated figure, keep the code or command that generated it in `work/code/` or the relevant draft section.
-- For every numerical claim that can be verified cheaply, run an independent check or record the formula-based verification.
-- When comparing two implementations or reports, verify the disagreement with theory, a small numerical test, or both.
-- If generated code is included in the final report, ensure the included code matches the code used to generate the reported results, or record any intentional difference.
-
-Figure and asset validation requirements:
-
-- Store generated figures under `work/assets/` with stable, descriptive filenames tied to question labels.
-- After figure generation, inspect the figure list and ensure no required figure is missing and no stale figure is being referenced.
-- For multi-figure reports, check for repeated images using filenames and, where feasible, file hashes or image dimensions/content summaries.
-- Check captions against the actual image content. The caption must name the correct question, quantity, signal/system, and comparison.
-- For plots, verify axes labels, units, legends, ranges, and whether magnitude/phase/time-domain data match the prompt.
-- If final DOCX/PDF embeds images, verify visible figure count and embedded media count. Orphaned media from templates or previous outputs must be removed when feasible.
-
 # Template Handling Rules
 
-If `has_template` is true or template files exist, follow `references/template_handling.md`. Never edit originals in `input/template/`. Copy or generate a final file in `output/`, preserve required structure and styling by default, and record unsupported template limitations in `work/checks.md`.
+If `has_template` is true, template files exist, `template_filename` names a document, or a problem/reference document is visibly an answer sheet/report shell, follow `references/template_handling.md`. Never edit originals in `input/`. Copy the selected template-like file into `work/assets/template_working/` before making changes, preserve required structure and styling where possible, and export/copy the completed working copy to `output/`.
+
+You may use `scripts/prepare_working_template.py <project-root>` from this skill to create the working copy. The script searches `template_dir`, `problem_dir`, and `reference_dir`, honors `template_filename` when possible, and prints the source and working-copy paths.
 
 If a template contains old report content, first separate template structure from old content. Reuse the template's layout, headings, metadata fields, styles, captions, and placeholders, but do not reuse old answer text unless it is explicitly still applicable or the user asks to keep it. Do not substantially redesign the template unless the user explicitly requests a redesign or the template cannot support the required report.
 
-Template filling is an in-place content replacement task. The default operation is to replace placeholder text, old answer text, table cell content, figure slots, and metadata field values while keeping the containing paragraph/run/table/caption/heading style unchanged. Do not change font size, font family, bold/italic state, paragraph spacing, alignment, margins, page size, heading style definitions, numbering style, or table style merely to make the document look cleaner.
+For template-backed paraphrase or rewrite tasks:
+
+- Create a template fidelity inventory before drafting: list every section, subsection, figure, table, appendix, formula block, log/data listing, and repeated answer pattern that must be preserved or replaced.
+- Paraphrase content at comparable depth. Do not compress detailed procedure, analysis, appendix, or discussion sections into short summaries when the user asks to preserve details.
+- Keep figures and tables at the same granularity where possible. If a source table/log has many rows or columns, the final report needs an equivalent full table/log, not only selected rows.
+- Do not expose transformation rules in the final prose. For example, if values are adjusted, present them as normal report results and keep the adjustment rule only in work notes/checks.
 
 # Final Report Generation
 
 Generate the final report only after `work/task_inventory.md` and `work/draft.md` are updated. Save final deliverables under `output/` using the configured `final_format` when feasible. Ensure every final section maps back to `work/task_inventory.md`.
 
+Before writing final prose, separate report content from process metadata. Report content includes experiment objectives, methods, results, analysis, conclusions, citations, appendices, and required answers. Process metadata includes prompt wording, transformation instructions, "paraphrase" requests, data-adjustment rules, tool limitations, file paths, and source/template labels. Process metadata belongs in `work/notes.md` and `work/checks.md`, not in `output/`.
+
+For template-backed reports, the normal final-generation path is:
+
+1. Use the working template copy in `work/assets/template_working/`.
+2. Replace placeholders, old answers, blank answer areas, metadata fields, figures, and tables in place.
+3. Preserve the template's structure, styles, headers/footers, numbering, and media relationships whenever feasible.
+4. Save or copy the finished document from the working area to `output/`.
+
+Only create a new document from scratch when the template cannot be edited with available tools, the format is unsupported, or the user explicitly asks for a rebuilt document. Record that limitation in `work/checks.md`.
+
 In the final report, preserve sub-question granularity from the inventory and draft. A combined high-level exercise introduction is allowed, but answers must still appear under separate headings or labels for each required sub-question.
-
-Do not shorten the final report by deleting required artifacts. Required source code, command snippets, parameter values, plots, tables, derivations, and verification text must appear in the final report when the prompt asks for them, even under a concise style requirement.
-
-Before considering the final report complete, apply two blocking gates:
-
-- Content completeness gate: every required artifact listed in `work/task_inventory.md` must appear in the final report or be documented as impossible with a reason in `work/checks.md`.
-- Template fidelity gate: when a template is used, the final report must preserve the template shell's structure and formatting, with every unavoidable deviation documented in `work/checks.md`.
-- Artifact placement gate: required code, figures, formulas, and explanations must appear under the correct sub-question, not only in an appendix, summary, or neighboring section.
-- Figure correctness gate: every final figure must be present, distinct unless documented, correctly captioned, and visually/semantically matched to the sub-question.
-- Reference-difference gate: if a supplied peer/example report differs from the current report in coverage, code, figures, or conclusions, the difference must be recorded and resolved before completion.
 
 ## DOCX Output Standards
 
@@ -322,8 +295,6 @@ DOCX equation and formula standards:
 DOCX generation workflow requirements:
 
 - Prefer reusing a DOCX template's styles when a template is supplied.
-- When a DOCX template is supplied, copy the template and replace content inside existing styled containers where feasible. Preserve run-level and paragraph-level formatting of placeholders/old content unless a specific content type requires a minimal local adjustment, such as inserting a readable equation object or a generated figure into an existing figure slot.
-- Do not globally redefine DOCX styles, normalize fonts, change heading sizes, alter margins, or rebuild the document from scratch when the template can be edited in place.
 - If creating a DOCX from scratch, define or apply stable styles for title, headings, body text, captions, tables, and equations before inserting content.
 - Open or inspect the generated DOCX structure when possible, or otherwise verify the produced file exists and is not empty.
 - Record DOCX layout, equation handling method, and any conversion limitations in `work/checks.md`.
@@ -334,13 +305,7 @@ Update `work/checks.md` with coverage and correctness checks. Verify that every 
 
 Explicitly check that no required sub-question was merged into a neighboring answer or hidden inside a broad exercise summary.
 
-Explicitly check that brevity or style requirements did not cause omission of required code, derivations, formulas, figures, tables, computations, verification, citations, or other deliverables.
-
-Explicitly check that every code block, formula, numerical result, figure, and table listed in the inventory appears under the correct final-report sub-question.
-
-Explicitly check that figures are not repeated by mistake, do not show stale outputs, and match their captions and discussion.
-
-If a peer/example report was supplied, explicitly check and record where the current report intentionally follows it, intentionally differs from it, or corrects it.
+For template-backed reports, explicitly compare final report structure against the template fidelity inventory. Any missing section, figure, table, appendix, log/data listing, formula block, or substantial explanation is a correctness issue unless the omission is requested or recorded with a reason.
 
 # Formatting Check
 
@@ -348,11 +313,9 @@ Update `work/checks.md` with formatting checks. Verify the final file exists und
 
 When a template was used, check that the final report preserves the template's main structure and styles and that old template content has been replaced or intentionally retained with a recorded reason.
 
-When a template was used, explicitly check that font sizes, font families, paragraph spacing, margins, heading style definitions, numbering, headers/footers, captions, and table styles were preserved except for documented technical limitations or user-requested redesign.
+Perform a prompt/meta leakage scan on the final deliverable. Search or inspect for configuration-only language such as prompt instructions, "paraphrase", "source report", "baseline source", "processed", "offset", "as requested", data-adjustment rules, local file paths, and tool/process notes. Remove such language from the final deliverable unless it is genuinely part of the assignment or explicitly requested by the user.
 
 For DOCX outputs, explicitly check page layout, margins, font consistency, heading styles, paragraph spacing, table readability, figure/table captions, visible sub-question separation, and equation rendering. If any DOCX equation is raw LaTeX, an image fallback, or plain-text math because native equations were not feasible, record that limitation.
-
-For DOCX outputs with images, explicitly check visible captions, embedded image references, image relationships, and media files. Remove unused template images or record why they remain.
 
 # Final Summary
 
@@ -375,13 +338,14 @@ If initialization fails, report the exact missing or failed operation and do not
 - Do not write a report during first-run initialization.
 - Do not scan nonexistent problem files during initialization.
 - Do not modify files under `input/`.
+- Do not treat `input/` read-only status as a reason to rebuild a template-backed report from scratch; copy the file into `work/assets/template_working/` and edit that copy.
 - Do not overwrite non-empty user files during initialization.
 - Do not write final deliverables outside `output/`.
 - Do not leave unchecked final output.
 - Do not omit `work/task_inventory.md`, `work/draft.md`, or `work/checks.md`.
 - Do not invent missing questions, references, citations, results, or computations.
-- Do not interpret concise/simple style requests as permission to omit required content.
-- Do not change template typography, spacing, margins, heading definitions, numbering, or table styles merely for aesthetics.
+- Do not leak user prompt text, transformation rules, data-adjustment instructions, internal file paths, or tool/process notes into the final deliverable.
+- Do not reduce a detailed template appendix, log, table, or procedure section to a brief summary when the user requested a detailed paraphrase or template-faithful rewrite.
 
 # Completion Criteria
 

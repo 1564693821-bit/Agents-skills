@@ -4,38 +4,27 @@
 
 ## Reference Mapping
 
-## Reference / Peer Report Comparison Notes
-
-- Authoritative problem source:
-- Peer/example reports used:
-- Coverage differences:
-- Code differences:
-- Figure/table differences:
-- Numerical/conclusion differences:
-- Resolution and evidence:
-
 ## Template Handling Notes
 
 - Reusable template shell:
 - Old/sample content to replace:
 - Old content intentionally retained and reason:
 - Template limitations:
-- Template formatting deviations and reasons:
 
-## Style and Completeness Notes
+## Template Fidelity Map
 
-- Style requirements:
-- How brevity/clean formatting is applied without omitting required content:
-- Required artifacts that need special handling:
-- Figure-heavy or code-heavy sections needing extra checks:
+- Sections/subsections to preserve:
+- Figures/captions to preserve or replace:
+- Tables/logs/data listings to preserve or replace:
+- Appendices to preserve or replace:
+- Formula blocks/equations to preserve or replace:
+- Detail-density risks:
 
-## Figure and Asset Notes
+## Internal-Only Instructions
 
-- Figure plan file or summary:
-- Generated asset directory:
-- Duplicate/stale figure check:
-- Visual/semantic inspection notes:
-- DOCX image package check, if applicable:
+- Prompt/config instructions that must not appear in the final report:
+- Data/anonymization/transformation rules that must stay internal:
+- Tool/process limitations that belong only in notes/checks:
 
 ## Pitfalls
 

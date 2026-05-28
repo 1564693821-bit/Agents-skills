@@ -12,7 +12,7 @@ python_env: ""
 allow_web: false
 allow_modify_input: false
 
-style_requirements: ""  # Presentation guidance only; concise/simple style must not omit required content.
+style_requirements: ""
 citation_requirements: ""
 special_instructions: ""
 

@@ -9,12 +9,9 @@
 - [ ] Every sub-question has a separately visible final answer.
 - [ ] Question numbering matches the source.
 - [ ] Grouped ranges such as `(a)-(f)` were expanded instead of merged.
-- [ ] Required code, commands, formulas, derivations, figures, tables, computations, verification, citations, and requested discussion points are present.
-- [ ] Required artifacts appear under the correct sub-question, not only in an appendix or neighboring section.
-- [ ] Every planned figure/table is mapped to the sub-question it supports.
-- [ ] Concise/simple style requirements did not remove required content.
-- [ ] Every required artifact listed in `work/task_inventory.md` appears in the final report or has a recorded limitation.
 - [ ] No unrelated content is added.
+- [ ] For template-backed reports, sections, figures, tables, appendices, formulas, logs/data listings, and captions from the template are preserved or explicitly accounted for.
+- [ ] Detailed appendices/logs/tables/procedures were not replaced by summaries unless requested.
 
 ## Correctness Check
 
@@ -24,18 +21,9 @@
 - [ ] Computations are reproducible.
 - [ ] Units and notation are consistent.
 - [ ] Figures and tables match the report.
-- [ ] Figures match their captions, axes/units, legends, source data, and assigned sub-question.
-- [ ] Repeated figures are intentional and documented.
-- [ ] Included code matches the computation or figure it supports, or any intentional difference is recorded.
 - [ ] Pitfalls in `work/notes.md` were reviewed.
-
-## Reference Comparison Check
-
-- [ ] Primary problem files and explicit user instructions were treated as authoritative.
-- [ ] Peer/example reports were used as comparison material, not silently as the task source.
-- [ ] Coverage differences with peer/example reports were recorded when applicable.
-- [ ] Code, figure, numerical, or conclusion differences were resolved by the primary prompt, theory, or reproducible computation.
-- [ ] Extra peer/example sub-questions not present in the primary problem file were not added without approval.
+- [ ] Template-backed rewrites preserve the expected detail level, not just the headings.
+- [ ] Appendix/log/table row counts, columns, and coverage are comparable to the source template or reference.
 
 ## Formatting Check
 
@@ -44,16 +32,14 @@
 - [ ] If a populated template exists, reusable structure was separated from old/sample content.
 - [ ] Old/sample template content was replaced or intentionally retained with a recorded reason.
 - [ ] The template was not substantially redesigned unless necessary or requested.
-- [ ] Template font sizes, font families, paragraph spacing, line spacing, alignment, margins, page size, headers/footers, heading definitions, numbering, captions, and table styles were preserved unless an exception is recorded.
-- [ ] Content was inserted into existing placeholders or matching styled blocks where feasible.
-- [ ] Every template formatting deviation is recorded in `work/checks.md` with a reason.
-- [ ] DOCX image package hygiene was checked when applicable: visible captions, embedded image references, image relationships, and media files agree or deviations are recorded.
 - [ ] Headings and numbering are consistent.
 - [ ] Sub-question headings or labels remain visible and separate.
 - [ ] Figures and tables have captions if needed.
 - [ ] Equations are readable.
 - [ ] Citations/references are consistent if used.
 - [ ] No TODO, FIXME, placeholder, or internal note remains.
+- [ ] No prompt/meta leakage remains in the final report, including prompt wording, transformation rules, data-adjustment rules, local paths, tool notes, or phrases such as "source report", "processed", "offset", "baseline", or "as requested".
+- [ ] Wide appendix/log/data tables are formatted readably instead of being shortened to fit.
 - [ ] No temporary files are in `output/`.
 
 ## Final Summary
