@@ -72,6 +72,8 @@ Human-facing entrypoint:
 
 Short-lived task state:
 
+- `<TASK_HOME>/Instructions.md`: user-maintained current task instructions. This file is mandatory; create it if
+  missing. It may be empty when the latest chat request is the task source.
 - `<TASK_HOME>/Current.md`: current task boundary.
 - `<TASK_HOME>/Decision.md`: blocking user decisions.
 - `<TASK_HOME>/Worklog.md`: high-signal current progress.
@@ -267,11 +269,13 @@ Required:
 2. Create `<PROJECT_AGENT_HOME>` and subdirectories if missing.
 3. Create `<PROJECT_AGENT_HOME>/README.md` if missing. It must explain the workspace layout, user-facing files,
    agent-facing files, and what the user should check after each task.
-4. Locate the active task file: user-specified file first, then `<TASK_HOME>/Instructions.md`, then compatible
+4. Create `<TASK_HOME>/Instructions.md` if missing. It must explain that users may place current task instructions
+   there and that an empty file means the latest chat request is the task source.
+5. Locate the active task file: user-specified file first, then `<TASK_HOME>/Instructions.md`, then compatible
    project history files if present.
-5. Locate the active done file: user-specified record first, then `<TASK_HOME>/Done.md`, then compatible project
+6. Locate the active done file: user-specified record first, then `<TASK_HOME>/Done.md`, then compatible project
    history files if present.
-6. Refresh `Current.md`, `Decision.md`, and `Worklog.md`.
+7. Refresh `Current.md`, `Decision.md`, and `Worklog.md`.
 
 Do not edit code before the active task and done files are understood.
 
