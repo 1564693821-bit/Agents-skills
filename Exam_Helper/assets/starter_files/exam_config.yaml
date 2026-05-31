@@ -1,0 +1,34 @@
+course_name: ""
+exam_date: ""
+target_score: ""
+full_grade_line: ""
+remaining_days: ""
+language: "中文"
+
+exam_format: "不清楚"
+difficulty: "不清楚"
+score_breakdown: ""
+
+daily_available_time: ""
+current_baseline: ""
+main_concern: ""
+
+preferred_output:
+  diagnosis: true
+  strategy: true
+  knowledge_map: true
+  question_type_map: true
+  active_recall_bank: true
+  generated_questions: true
+  mistake_diagnosis: true
+  sprint_plan: true
+
+resource_policy:
+  use_ppt: true
+  use_past_papers: true
+  use_homework: true
+  use_textbook: true
+  use_online_course: "only_for_gaps"
+  use_teacher_hints: true
+
+special_instructions: ""

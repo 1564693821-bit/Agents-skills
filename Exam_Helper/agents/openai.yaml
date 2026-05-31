@@ -1,0 +1,8 @@
+interface:
+  display_name: "Exam Helper"
+  short_description: "初始化并运营期末复习工作区"
+  brand_color: "#2563EB"
+  default_prompt: "Use $Exam_Helper to initialize this empty folder as a final exam review workspace and start with course diagnosis."
+
+policy:
+  allow_implicit_invocation: true
