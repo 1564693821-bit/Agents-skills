@@ -44,19 +44,22 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 |   +-- online_course/
 |   +-- teacher_hints/
 +-- work/
-|   +-- resource_inventory.md
-|   +-- exam_diagnosis.md
-|   +-- strategy.md
-|   +-- knowledge_map.md
-|   +-- question_type_map.md
-|   +-- active_recall_bank.md
-|   +-- mistake_log.md
-|   +-- daily_plan.md
-|   +-- review_log.md
-|   +-- sprint_plan.md
-|   +-- generated_questions.md
+|   +-- internal_outputs/
+|   |   +-- diagnosis/
+|   |   +-- maps/
+|   |   +-- plans/
+|   |   +-- training/
 |   +-- assets/
 +-- output/
+|   +-- README.md
+|   +-- 00_overview/
+|   |   +-- 整体规划.md
+|   |   +-- 当前状态.md
+|   +-- 01_daily/
+|   +-- 02_question_types/
+|   +-- 03_notes/
+|   +-- 04_practice/
+|   +-- 05_final/
 ```
 
 初始化规则：
@@ -73,11 +76,11 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 1. `exam_config.yaml`
 2. `input/diagnosis/00_课程诊断表.md`
 3. `input/` 下所有课程资料
-4. `work/` 中已有诊断、策略、错题和复盘记录
+4. `output/` 中用户长期阅读区已有内容，以及 `work/internal_outputs/` 中已有诊断、策略、错题和复盘记录
 
 资料处理要求：
 
-- 对 PPT、往年卷、作业、教材、网课、老师划重点分别建立资料清单。
+- 对 PPT、往年卷、作业、教材、网课、老师划重点分别建立资料清单；详细材料写入 `work/internal_outputs/` 对应分区，用户需要长期看的规划、每日计划、题型整理和笔记写入 `output/` 对应分区。
 - 不把资料“总结完”当作学会；整理结果必须导向考试地图、题型地图、主动回忆题、错题闭环或限时训练。
 - 如果用户提供 PDF，按仓库要求使用 `general` conda 环境中的 `hf` 读取 PDF。
 - 如果资料太多，先抽样判断资料价值和考试关联，再决定是否深读。
@@ -90,10 +93,13 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 必须输出或更新：
 
-- `work/resource_inventory.md`
-- `work/exam_diagnosis.md`
-- `work/strategy.md`
-- `work/knowledge_map.md`
+- `work/internal_outputs/diagnosis/resource_inventory.md`
+- `work/internal_outputs/diagnosis/exam_diagnosis.md`
+- `work/internal_outputs/plans/strategy.md`
+- `work/internal_outputs/maps/knowledge_map.md`
+- `output/00_overview/整体规划.md`
+- `output/00_overview/当前状态.md`
+- 当天需要行动时更新 `output/01_daily/YYYY-MM-DD.md`
 
 诊断必须回答：
 
@@ -111,9 +117,12 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 输出或更新：
 
-- `work/knowledge_map.md`
-- `work/active_recall_bank.md`
-- `work/strategy.md`
+- `work/internal_outputs/maps/knowledge_map.md`
+- `work/internal_outputs/maps/active_recall_bank.md`
+- `work/internal_outputs/plans/strategy.md`
+- `output/03_notes/` 中的相关浓缩笔记
+- `output/00_overview/当前状态.md`
+- 当天需要行动时更新 `output/01_daily/YYYY-MM-DD.md`
 
 必须整理：
 
@@ -132,10 +141,13 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 输出或更新：
 
-- `work/resource_inventory.md`
-- `work/knowledge_map.md`
-- `work/question_type_map.md`
-- `work/active_recall_bank.md`
+- `work/internal_outputs/diagnosis/resource_inventory.md`
+- `work/internal_outputs/maps/knowledge_map.md`
+- `work/internal_outputs/maps/question_type_map.md`
+- `work/internal_outputs/maps/active_recall_bank.md`
+- `output/02_question_types/` 中的题型整理
+- `output/03_notes/` 中的浓缩笔记
+- `output/00_overview/当前状态.md`
 
 整理规则：
 
@@ -152,9 +164,12 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 输出或更新：
 
-- `work/strategy.md`
-- `work/daily_plan.md`
-- `work/review_log.md`
+- `work/internal_outputs/plans/strategy.md`
+- `work/internal_outputs/plans/daily_plan.md`
+- `work/internal_outputs/plans/review_log.md`
+- `output/00_overview/整体规划.md`
+- `output/00_overview/当前状态.md`
+- `output/01_daily/YYYY-MM-DD.md`
 
 计划必须基于诊断，不得先排日程再倒推理由。
 
@@ -178,9 +193,11 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 输出或更新：
 
-- `work/generated_questions.md`
-- `work/active_recall_bank.md`
-- `work/mistake_log.md`
+- `work/internal_outputs/training/generated_questions.md`
+- `work/internal_outputs/maps/active_recall_bank.md`
+- `work/internal_outputs/training/mistake_log.md`
+- 用户要做的题写入 `output/04_practice/`
+- 必要时更新 `output/01_daily/YYYY-MM-DD.md`
 
 出题原则：
 
@@ -196,9 +213,11 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 输出或更新：
 
-- `work/mistake_log.md`
-- `work/question_type_map.md`
-- `work/daily_plan.md`
+- `work/internal_outputs/training/mistake_log.md`
+- `work/internal_outputs/maps/question_type_map.md`
+- `work/internal_outputs/plans/daily_plan.md`
+- `output/01_daily/YYYY-MM-DD.md`
+- 必要时更新 `output/02_question_types/` 或 `output/03_notes/`
 
 错题必须归因到：
 
@@ -218,6 +237,15 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 当用户说时间变少、目标变化、资料价值变化、某章节崩、往年卷重复率高、老师划重点、复习进度滞后时，重新判断策略。
 
+输出或更新：
+
+- `work/internal_outputs/plans/strategy.md`
+- `work/internal_outputs/plans/daily_plan.md`
+- `work/internal_outputs/plans/review_log.md`
+- `output/00_overview/整体规划.md`
+- `output/00_overview/当前状态.md`
+- `output/01_daily/YYYY-MM-DD.md`
+
 每次必须输出：
 
 1. 当前状态判断
@@ -232,6 +260,15 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 ### 8. Sprint Mode
 
 当距离考试 7 天以内，或用户明确要求冲刺，进入冲刺模式。参考 `references/sprint_mode.md`。
+
+输出或更新：
+
+- `work/internal_outputs/plans/sprint_plan.md`
+- `work/internal_outputs/maps/question_type_map.md`
+- `work/internal_outputs/training/mistake_log.md`
+- `output/00_overview/当前状态.md`
+- `output/01_daily/YYYY-MM-DD.md`
+- 必要时生成 `output/05_final/final_sprint_pack.md`
 
 冲刺模式优先：
 
@@ -262,24 +299,47 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 ## Output Contract
 
-根据任务阶段，把过程文件写在 `work/`，把最终可交付总结写在 `output/`。
+`output/` 是用户长期阅读区，服务从开始备考到考试结束的连续工作。它不是一次性报告区，也不是内部草稿区。这里应该放用户每天会打开看的材料：整体规划、每日计划、题型整理、浓缩笔记、训练任务和最终包。
+
+`work/internal_outputs/` 是助手内部工作区：放长诊断、资料清单、完整知识地图、完整题型地图、主动回忆题库、错题全量记录、题库全量记录、复盘草稿、计划草稿等工作材料。用户通常不需要直接阅读。
+
+`work/assets/` 放临时抽取、缓存、脚本产物。
+
+### 用户可见输出纪律
+
+- `output/00_overview/整体规划.md`：长期总路线，包含目标、阶段、资料优先级、题型优先级和总体节奏。阶段变化时更新，不要每天重写。
+- `output/00_overview/当前状态.md`：当前阶段、最大瓶颈、本周主线、今天最重要的动作。动态调整时更新。
+- `output/01_daily/YYYY-MM-DD.md`：每日计划和复盘。每天一个文件，内容必须可执行：任务、时长、完成标准、复盘、明日调整。
+- `output/02_question_types/`：用户要求的题型整理、解题入口、标准步骤、常见错误。每个题型一个文件，文件名清晰。
+- `output/03_notes/`：浓缩笔记、公式入口、概念边界、考场调用表。不要写百科式长总结。
+- `output/04_practice/`：用户当天要做的训练题、限时任务、模拟安排。完整题库仍放 `work/internal_outputs/training/`。
+- `output/05_final/`：只在阶段结束、冲刺包、考前包、用户明确要“最终版”时写入。
+- `output/` 禁止放内部推理、空模板、占位表、全量题库、全量错题、资料抽取原文。
+- 每次给用户生成可见文件，都要保证它能直接指导行动或复习，不为了“留痕”制造文件。
 
 常用文件：
 
 ```text
-work/resource_inventory.md
-work/exam_diagnosis.md
-work/strategy.md
-work/knowledge_map.md
-work/question_type_map.md
-work/active_recall_bank.md
-work/mistake_log.md
-work/daily_plan.md
-work/review_log.md
-work/sprint_plan.md
-work/generated_questions.md
-output/final_exam_strategy.md
-output/final_sprint_pack.md
+output/README.md
+output/00_overview/整体规划.md
+output/00_overview/当前状态.md
+output/01_daily/YYYY-MM-DD.md
+output/02_question_types/<题型名>.md
+output/03_notes/<主题名>.md
+output/04_practice/<训练名>.md
+output/05_final/final_exam_strategy.md
+output/05_final/final_sprint_pack.md
+work/internal_outputs/diagnosis/resource_inventory.md
+work/internal_outputs/diagnosis/exam_diagnosis.md
+work/internal_outputs/maps/knowledge_map.md
+work/internal_outputs/maps/question_type_map.md
+work/internal_outputs/maps/active_recall_bank.md
+work/internal_outputs/plans/strategy.md
+work/internal_outputs/plans/daily_plan.md
+work/internal_outputs/plans/review_log.md
+work/internal_outputs/plans/sprint_plan.md
+work/internal_outputs/training/generated_questions.md
+work/internal_outputs/training/mistake_log.md
 ```
 
 ## Style
