@@ -46,6 +46,7 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 +-- work/
 |   +-- internal_outputs/
 |   |   +-- diagnosis/
+|   |   +-- resource_routes/
 |   |   +-- maps/
 |   |   +-- plans/
 |   |   +-- training/
@@ -55,6 +56,7 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 |   +-- 00_overview/
 |   |   +-- 整体规划.md
 |   |   +-- 当前状态.md
+|   |   +-- 从零学习路线.md
 |   +-- 01_daily/
 |   +-- 02_question_types/
 |   +-- 03_notes/
@@ -76,16 +78,44 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 1. `exam_config.yaml`
 2. `input/diagnosis/00_课程诊断表.md`
 3. `input/` 下所有课程资料
-4. `output/` 中用户长期阅读区已有内容，以及 `work/internal_outputs/` 中已有诊断、策略、错题和复盘记录
+4. `work/internal_outputs/resource_routes/resource_router.md` 和 `work/internal_outputs/resource_routes/learning_ladder.md`
+5. `output/` 中用户长期阅读区已有内容，以及 `work/internal_outputs/` 中已有诊断、策略、错题和复盘记录
 
 资料处理要求：
 
 - 对 PPT、往年卷、作业、教材、网课、老师划重点分别建立资料清单；详细材料写入 `work/internal_outputs/` 对应分区，用户需要长期看的规划、每日计划、题型整理和笔记写入 `output/` 对应分区。
+- 必须维护资源路由层：`work/internal_outputs/resource_routes/resource_router.md` 记录每章该看哪些 PPT、网课分 P、作业题、往年卷题型；`work/internal_outputs/resource_routes/learning_ladder.md` 记录零基础用户从概念到做题的学习阶梯。
+- 之后给每日计划、题型整理、笔记、训练推荐时，优先参考资源路由层，不要每次临时从 `input/` 重新猜。
 - 不把资料“总结完”当作学会；整理结果必须导向考试地图、题型地图、主动回忆题、错题闭环或限时训练。
 - 如果用户提供 PDF，按仓库要求使用 `general` conda 环境中的 `hf` 读取 PDF。
 - 如果资料太多，先抽样判断资料价值和考试关联，再决定是否深读。
 
 ## Operating Modes
+
+### 0. Resource Routing and Learning Ladder Mode
+
+用于初始化诊断之后、正式每日推进之前，也用于资料发生变化时。这个模式是长期复习系统的底座。
+
+必须输出或更新：
+
+- `work/internal_outputs/resource_routes/resource_router.md`
+- `work/internal_outputs/resource_routes/learning_ladder.md`
+- `work/internal_outputs/diagnosis/resource_inventory.md`
+- 必要时更新 `output/00_overview/从零学习路线.md`
+- 必要时更新 `output/00_overview/当前状态.md`
+
+必须维护：
+
+- 每章资源路由：PPT 文件、PPT 要看的主题、网课分 P、作业题、往年卷题型、最低掌握标准。
+- 从零学习阶梯：先理解问题和表示，再看资源，再主动输出，再做基础题，再做往年卷小问。
+- 每日计划生成规则：不能只写“看 PPT/看网课/做题”，必须写具体文件、分 P、题号、输出任务和完成标准。
+- 资料变更规则：当用户新增或更新 PPT、作业、往年卷、网课信息时，先更新资源路由，再判断是否影响当前计划。
+
+零基础用户保护：
+
+- 如果用户自述“几乎不会/完全没概念”，不得直接安排整套卷或高强度大题。
+- 每个主题必须先给“这个知识解决什么问题”和“题目第一步怎么识别”。
+- 做题从“写入口、画骨架、做小问”开始，再进入完整限时题。
 
 ### 1. Diagnosis Mode
 
@@ -95,10 +125,13 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 - `work/internal_outputs/diagnosis/resource_inventory.md`
 - `work/internal_outputs/diagnosis/exam_diagnosis.md`
+- `work/internal_outputs/resource_routes/resource_router.md`
+- `work/internal_outputs/resource_routes/learning_ladder.md`
 - `work/internal_outputs/plans/strategy.md`
 - `work/internal_outputs/maps/knowledge_map.md`
 - `output/00_overview/整体规划.md`
 - `output/00_overview/当前状态.md`
+- `output/00_overview/从零学习路线.md`
 - 当天需要行动时更新 `output/01_daily/YYYY-MM-DD.md`
 
 诊断必须回答：
@@ -162,6 +195,13 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 用于生成阶段策略、每日计划和学习闭环。参考 `references/learning_system.md`。
 
+生成计划前必须读取：
+
+- `work/internal_outputs/resource_routes/resource_router.md`
+- `work/internal_outputs/resource_routes/learning_ladder.md`
+- `work/internal_outputs/maps/question_type_map.md`
+- `work/internal_outputs/plans/review_log.md`
+
 输出或更新：
 
 - `work/internal_outputs/plans/strategy.md`
@@ -172,6 +212,14 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 - `output/01_daily/YYYY-MM-DD.md`
 
 计划必须基于诊断，不得先排日程再倒推理由。
+
+每日计划必须具体到资源，不得只写泛化动作：
+
+- PPT：写具体文件和主题，例如 `input/ppt/chapter_4.pptx` 的 CTFT 性质。
+- 网课：写分 P 编号和观看目的，例如 P20 看定义，P22 看性质。
+- 练习：写具体作业题号或往年卷年份/Q 号。
+- 输出：写要默写、画图、口述或完成的小问。
+- 完成标准：必须可检查。
 
 每日最小闭环必须包含至少三类动作：
 
@@ -309,6 +357,7 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 
 - `output/00_overview/整体规划.md`：长期总路线，包含目标、阶段、资料优先级、题型优先级和总体节奏。阶段变化时更新，不要每天重写。
 - `output/00_overview/当前状态.md`：当前阶段、最大瓶颈、本周主线、今天最重要的动作。动态调整时更新。
+- `output/00_overview/从零学习路线.md`：当用户基础很弱时保留，解释如何从概念、资源、主动输出过渡到做题。
 - `output/01_daily/YYYY-MM-DD.md`：每日计划和复盘。每天一个文件，内容必须可执行：任务、时长、完成标准、复盘、明日调整。
 - `output/02_question_types/`：用户要求的题型整理、解题入口、标准步骤、常见错误。每个题型一个文件，文件名清晰。
 - `output/03_notes/`：浓缩笔记、公式入口、概念边界、考场调用表。不要写百科式长总结。
@@ -323,6 +372,7 @@ description: Use this skill when the user wants an end-to-end Chinese final exam
 output/README.md
 output/00_overview/整体规划.md
 output/00_overview/当前状态.md
+output/00_overview/从零学习路线.md
 output/01_daily/YYYY-MM-DD.md
 output/02_question_types/<题型名>.md
 output/03_notes/<主题名>.md
@@ -331,6 +381,8 @@ output/05_final/final_exam_strategy.md
 output/05_final/final_sprint_pack.md
 work/internal_outputs/diagnosis/resource_inventory.md
 work/internal_outputs/diagnosis/exam_diagnosis.md
+work/internal_outputs/resource_routes/resource_router.md
+work/internal_outputs/resource_routes/learning_ladder.md
 work/internal_outputs/maps/knowledge_map.md
 work/internal_outputs/maps/question_type_map.md
 work/internal_outputs/maps/active_recall_bank.md
