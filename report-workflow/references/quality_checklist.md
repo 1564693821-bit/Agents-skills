@@ -15,6 +15,8 @@
 - No unrelated content added.
 - For template-backed reports, every template fidelity item is represented: sections, figures, tables, appendices, formulas, logs/data listings, captions, and repeated answer patterns.
 - Detailed template/reference appendices, logs, tables, or procedures were not replaced by summaries unless the user requested abridgement.
+- When a template was supplied, the final report was filled into the template rather than redesigned from it.
+- Template fill locations were accounted for: metadata fields, answer blocks, tables, code blocks, figures, captions, headers/footers, and repeated styled patterns.
 
 ## Correctness Check
 
@@ -36,6 +38,7 @@
 - Content coverage and correctness were reviewed before final layout or template placement.
 - Content defects found during review were fixed in `work/draft.md` before polishing layout.
 - Final layout changes did not alter results, remove assumptions, weaken derivations, or hide sub-question answers.
+- Template-fitting edits did not change numerical values, formulas, signs, units, bandwidth conclusions, stability conclusions, or required labels.
 - Any unavoidable content limitation was recorded in `work/checks.md` before completion.
 
 ## Pitfall Check
@@ -44,6 +47,7 @@
 - Ambiguities handled.
 - Edge cases considered.
 - Common mistakes avoided.
+- For template-backed reports, the common mistake of creating a polished template-inspired replacement instead of filling the template was explicitly avoided.
 - Internal process instructions were kept out of final prose.
 - Data-adjustment, anonymization, paraphrase, style-transfer, or tool-choice rules are recorded only in work notes/checks unless explicitly required in the report.
 
@@ -54,6 +58,11 @@
 - If a populated template was used, old report content was separated from the reusable template shell.
 - Old template content was replaced or intentionally retained with a recorded reason.
 - The template's main layout, section order, styles, numbering, and caption conventions were not substantially redesigned unless necessary or requested.
+- The final file visibly looks like the supplied template filled by a careful human, not like a newly designed document.
+- Original template and final output were visually or structurally compared when feasible.
+- Cover/title pages, metadata fields, section order, heading hierarchy, paragraph indentation, code block style, table layout, figure placement, captions, headers/footers, and page flow were checked against the original template.
+- Major template mismatches were treated as blocking errors and fixed before completion.
+- If exact template filling was impossible, the precise tool/file-format blocker and closest faithful workaround were recorded.
 - Headings consistent.
 - Sub-question headings or labels remain visible and separate.
 - Equations readable.

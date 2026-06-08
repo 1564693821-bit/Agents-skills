@@ -122,6 +122,9 @@ Hard requirements:
 - Do not write the final report before creating or updating `work/task_inventory.md`.
 - Do not write the final report before drafting answers in `work/draft.md`.
 - Do not rebuild a template-backed report from scratch when the source template can be copied and edited.
+- When a template exists, the governing principle is strict template filling, not template-inspired rebuilding. Think of the task as opening the copied template in Word and filling the existing fields, paragraphs, tables, answer blocks, code blocks, figures, captions, headers, and footers in place. Do not spend effort inventing a new implementation of the template; spend that effort preserving and filling the actual template.
+- For template-backed reports, any output that merely looks polished but differs materially from the supplied template is wrong, even if the content is correct. A visually attractive redesign is a failure unless the user explicitly requested redesign.
+- If available tools are insufficient to fill or verify the template faithfully, acquire or use stronger tools rather than abandoning the template. For DOCX this may include LibreOffice/soffice, python-docx, package-level DOCX XML edits, PDF/PNG rendering, screenshots, or other document tooling. Record the tool choice and verification in `work/checks.md`.
 - Do not edit an `input/` file directly; copy the template/source document into `work/assets/template_working/` first and modify that working copy.
 - Create or update `work/checks.md` before completion.
 - Treat report writing as two passes: content first, layout second. Do not optimize bulleting, spacing, table layout, DOCX styling, or visual polish until the draft content has passed coverage and correctness review.
@@ -269,6 +272,14 @@ If `has_template` is true, template files exist, `template_filename` names a doc
 
 You may use `scripts/prepare_working_template.py <project-root>` from this skill to create the working copy. The script searches `template_dir`, `problem_dir`, and `reference_dir`, honors `template_filename` when possible, and prints the source and working-copy paths.
 
+Template-filling rule, mandatory and strong:
+
+- Treat the supplied template as the document to be completed, not as visual inspiration.
+- Prefer editing the copied template in place: replace old text, placeholders, answer bodies, code blocks, figures, captions, metadata fields, and tables while preserving their original positions, styles, section order, spacing, page setup, headers/footers, numbering, and repeated patterns.
+- Do not decide that a custom script-generated document is "close enough" merely because it is neat. If scripting is used, it must operate on the copied template or reproduce the copied template's exact visible structure only when direct editing is impossible.
+- Before finishing, invest serious effort in template fidelity. Render, inspect, compare, and iterate until the final output looks like the supplied template filled by a careful human user. This is a required completion condition, not optional polish.
+- If exact in-place filling is impossible, document the specific blocker in `work/checks.md`, use the closest faithful workaround, and tell the user. Do not silently substitute a redesigned report.
+
 If a template contains old report content, first separate template structure from old content. Reuse the template's layout, headings, metadata fields, styles, captions, and placeholders, but do not reuse old answer text unless it is explicitly still applicable or the user asks to keep it. Do not substantially redesign the template unless the user explicitly requests a redesign or the template cannot support the required report.
 
 For template-backed paraphrase or rewrite tasks:
@@ -293,7 +304,7 @@ For template-backed reports, the normal final-generation path is:
 3. Preserve the template's structure, styles, headers/footers, numbering, and media relationships whenever feasible.
 4. Save or copy the finished document from the working area to `output/`.
 
-Only create a new document from scratch when the template cannot be edited with available tools, the format is unsupported, or the user explicitly asks for a rebuilt document. Record that limitation in `work/checks.md`.
+Only create a new document from scratch when the template cannot be edited with available tools, the format is unsupported, or the user explicitly asks for a rebuilt document. This exception is narrow. Before using it, try reasonable tooling that would let you fill the copied template like a human user would. Record the exact limitation in `work/checks.md`.
 
 In the final report, preserve sub-question granularity from the inventory and draft. A combined high-level exercise introduction is allowed, but answers must still appear under separate headings or labels for each required sub-question.
 
@@ -362,6 +373,14 @@ Check whether the layout choices are appropriate for the content: lists should b
 
 When a template was used, check that the final report preserves the template's main structure and styles and that old template content has been replaced or intentionally retained with a recorded reason.
 
+For template-backed reports, perform a high-effort template-fidelity check before completion:
+
+- Render or otherwise visually inspect the original template and the final output when feasible.
+- Compare cover/title pages, metadata fields, section order, heading levels, paragraph indenting, line spacing, fonts, tables, code blocks, figures, captions, headers/footers, page breaks, and repeated answer patterns.
+- Confirm the final document feels like the original template filled in, not a newly designed report inspired by it.
+- Treat major visual or structural mismatch from the template as a blocking formatting error, even when the content is correct.
+- Record the comparison method, observed mismatches, fixes made, and any remaining limitation in `work/checks.md`.
+
 Perform a prompt/meta leakage scan on the final deliverable. Search or inspect for configuration-only language such as prompt instructions, "paraphrase", "source report", "baseline source", "processed", "offset", "as requested", data-adjustment rules, local file paths, and tool/process notes. Remove such language from the final deliverable unless it is genuinely part of the assignment or explicitly requested by the user.
 
 For DOCX outputs, explicitly check page layout, margins, font consistency, heading styles, paragraph spacing, table readability, figure/table captions, visible sub-question separation, and equation rendering. If any DOCX equation is raw LaTeX, an image fallback, or plain-text math because native equations were not feasible, record that limitation.
@@ -407,4 +426,5 @@ Report-writing mode is complete only when:
 - `work/draft.md` contains drafted answers.
 - The final report is saved under `output/`.
 - `work/checks.md` contains coverage, correctness, formatting, and final summary sections.
+- If a template was used, `work/checks.md` contains a serious template-fidelity check proving the deliverable was filled into the template rather than redesigned from it, or records the exact unavoidable blocker.
 - The final response summarizes outputs, checks, assumptions, and limitations.

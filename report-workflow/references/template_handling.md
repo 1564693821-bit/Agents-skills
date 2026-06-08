@@ -48,6 +48,23 @@ Do not rebuild a document from scratch merely because `input/` is read-only. Rea
 
 Preserve section order, headings, styles, numbering, captions, tables, required fields, and placeholders where appropriate. Replace placeholders with final content only after drafting answers in `work/draft.md`.
 
+This rule is strict: a template is not a style mood board. A template is the document shell to fill. The correct mental model is a human opening the copied template in Word, selecting old or placeholder content, and replacing it with the new report while leaving the template's visible structure intact.
+
+Mandatory template-filling behavior:
+
+- Fill the copied template in place whenever possible.
+- Replace old report text, metadata, answer paragraphs, code listings, figures, captions, tables, and appendices at their corresponding locations.
+- Preserve the original page setup, margins, section order, heading hierarchy, indentation, fonts, spacing, headers/footers, numbering, caption conventions, and repeated answer patterns.
+- When the template has a repeated block, duplicate that block's style for additional required answers instead of inventing a different layout.
+- Use tools that let you fill or verify the template faithfully. If a normal text/DOCX library is not enough, use stronger document tools such as LibreOffice/soffice rendering, DOCX XML/package edits, PDF/PNG page renders, screenshots, or visual inspection.
+
+Prohibited template behavior:
+
+- Do not make a new polished document that merely resembles the template.
+- Do not replace the template with a custom design because it is easier to generate.
+- Do not treat "cleaner", "prettier", or "more organized" as better when it moves away from the supplied template.
+- Do not call the task complete while the output has major visual differences from the template that a human grader would notice.
+
 Do not use template placement as the first writing pass. First draft and review the content in `work/draft.md`; then place the checked content into the copied template and adjust layout.
 
 Do not substantially redesign the template. Keep the template's layout and visual conventions unless:
@@ -57,6 +74,8 @@ Do not substantially redesign the template. Keep the template's layout and visua
 - The template structure prevents the required answers from fitting correctly.
 
 When exact in-place editing is possible, replace old content within the working template shell rather than creating a new document from scratch. When exact in-place editing is not possible, recreate the closest possible structure and record the limitation in `work/checks.md`.
+
+The "exact in-place editing is not possible" exception must be earned, not assumed. Try reasonable template-filling tools first. If the exception is used, `work/checks.md` must say what failed, why filling the copied template was impossible, and how the fallback preserves the original template as closely as possible.
 
 ## Preserve Information Density
 
@@ -107,6 +126,7 @@ Rules:
 When the template is DOCX or the final output is DOCX:
 
 - Prefer editing the copied DOCX package in `work/assets/template_working/` or using a DOCX library against that working copy.
+- Treat the copied DOCX as the primary artifact. The goal is to fill that file, not to generate a separate Word document with similar headings.
 - Reuse the template's defined styles for title, headings, body text, captions, tables, headers, and footers whenever possible.
 - If the template lacks usable styles, create a restrained academic/report layout rather than inventing a decorative design.
 - Apply layout after the content review passes. The DOCX pass should organize checked content; it should not be the moment where missing answers or weak derivations are first discovered.
@@ -118,6 +138,16 @@ When the template is DOCX or the final output is DOCX:
 - Avoid random text boxes, floating shapes, excessive colors, inconsistent fonts, oversized headings, and manual blank-line spacing.
 - Use readable tables with header rows, sensible column widths, consistent borders, and no clipped text.
 - Use numbered captions for figures and tables when present.
+
+DOCX template-fidelity verification is mandatory before completion:
+
+- Render or open the original template and final DOCX when feasible.
+- Compare the first page, metadata block, main section pages, representative code/table/figure pages, and final page.
+- Check that the final DOCX looks like the template with new content inserted.
+- Iterate on mismatches in spacing, widths, indentation, line breaks, code block shading, caption style, figure sizing, and page flow.
+- Record the render/open tool, pages inspected, mismatches found, and fixes made in `work/checks.md`.
+
+If LibreOffice/soffice, Word, or another renderer is missing and visual fidelity matters, obtain or request the needed tool rather than accepting an unverified template-backed DOCX. If a renderer truly cannot be used, record the limitation clearly and perform the strongest structural inspection available.
 
 ## Formula Rules
 

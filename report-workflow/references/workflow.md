@@ -151,6 +151,9 @@ Required actions:
 - For template-backed paraphrase/rewrite tasks, build a template fidelity map: sections/subsections, figures, tables, appendices, formulas, logs/data listings, captions, metadata fields, and approximate depth/detail for each part.
 - If the template contains previous answers or sample content, separate the reusable template shell from old content before drafting. Record which parts are structure and which parts are old content in `work/notes.md`.
 - Preserve the working copy's main structure and formatting. Replace old content in place where possible instead of rebuilding the report from scratch.
+- Adopt the strict filling mindset: the copied template is the document to complete. The agent's job is not to design a new report that resembles the template; the job is to fill the template as a careful human user would.
+- Identify the exact reusable fill locations: title fields, metadata fields, answer paragraphs, code blocks, figure slots, caption patterns, table rows, appendices, headers/footers, and repeated styled blocks.
+- Identify the tools needed to edit and verify the actual template. If ordinary text generation is insufficient, plan stronger document tooling instead of abandoning the template.
 - Preserve information density. Do not turn detailed procedure, analysis, appendix, log, or table material into a brief summary unless the user requests an abridged deliverable.
 - If a template appendix/log/table has many rows/columns, plan an equivalent final appendix/log/table with comparable columns and row coverage.
 - Never modify original files under `input/`.
@@ -166,6 +169,8 @@ Common mistakes:
 - Ignoring required placeholders.
 - Treating old report content in the template as if it were new source material.
 - Replacing the template with a newly designed document when the template can be reused.
+- Treating a polished custom layout as acceptable when it no longer looks like the supplied template.
+- Spending effort on implementing a template-like design instead of filling the copied template.
 - Treating a full appendix or data log as optional background and replacing it with a short summary.
 
 ## Phase 6: Task Inventory Creation
@@ -321,6 +326,7 @@ Required actions:
 - Preserve template requirements when applicable.
 - If using a template, edit the copy in `work/assets/template_working/` and then save/copy the completed deliverable to `output/`.
 - If using a populated template, keep its layout, section order, styles, fields, and caption conventions as stable as possible while replacing old answer content.
+- For template-backed outputs, final generation is a template-filling operation. Replace content in the working template or duplicate existing styled blocks. Do not create a newly designed document unless direct filling is impossible after reasonable tooling attempts.
 - Do not substantially redesign a template-backed report unless the template is unreadable, unusable, or the user explicitly asks for redesign.
 - Maintain template information density. Include equivalent figures, tables, appendices, formulas, logs/data listings, and explanatory paragraphs unless omission is requested or justified in `work/checks.md`.
 - Keep prompt/process metadata out of final prose. Do not write transformation rules, data-adjustment rules, local source paths, "source report", "processed", "baseline", "as requested", or tool notes into the final report unless they are assignment content.
@@ -339,6 +345,7 @@ Required actions:
 Stop conditions:
 
 - Stop and record limitation if final format cannot be produced.
+- Stop and record a blocking formatting issue if a template-backed final output is visibly a redesign rather than the supplied template filled in.
 
 Common mistakes:
 
@@ -349,6 +356,8 @@ Common mistakes:
 - Using old content from a template as filler.
 - Replacing detailed appendices/logs/tables with a short summary.
 - Creating a new blank document when the copied working template could be edited.
+- Using code to recreate a "nice" template-inspired document instead of filling the actual working template.
+- Accepting major differences in cover, section spacing, code block width, captions, table layout, headers/footers, or repeated answer patterns because the new document looks clean.
 - Producing a DOCX with inconsistent fonts, ugly spacing, unstyled headings, unreadable formulas, or screenshot formulas when an editable equation was feasible.
 - Leaving the draft's rough bullet structure unchanged when it makes the final report harder to read.
 - Pasting LaTeX source into DOCX and assuming Word will convert it automatically.
@@ -368,6 +377,7 @@ Required actions:
 - Verify assumptions, reasoning, units, notation, computations, figures, tables, and citations.
 - Verify formulas against the LaTeX source in the draft and check that no formula was dropped, mistranscribed, or replaced by vague prose.
 - For template-backed reports, compare the final deliverable against the template fidelity map. Check that sections, figures, tables, appendices, formulas, logs/data listings, captions, and depth/detail are preserved or explicitly accounted for.
+- For template-backed reports, also compare content after layout edits against the reviewed draft. Confirm that template fitting did not change numerical values, stability conclusions, bandwidth statements, formulas, assumptions, or required labels.
 - For appendices/logs/tables, compare row counts, column meanings, and coverage against the template/reference. Summaries are insufficient when the source contains detailed raw or tabular material and the user requested detail preservation.
 - Record known limitations.
 
@@ -395,6 +405,9 @@ Required actions:
 - Check layout choices after content correctness: lists are parallel and purposeful, paragraphs carry explanations cleanly, tables improve readability, and equation blocks are readable.
 - Search or inspect the final deliverable for prompt/meta leakage: prompt wording, "paraphrase", "source report", "baseline source", "processed", "offset", "as requested", data-adjustment rules, local paths, and tool/process notes.
 - If a template was used, confirm the final file keeps the template's main structure and that old content was stripped or intentionally retained with a reason recorded in `work/notes.md`.
+- If a template was used, perform a serious template-fidelity inspection before completion. Compare original template and final output visually or structurally, focusing on cover pages, metadata areas, section order, heading hierarchy, paragraph width/indentation, code blocks, tables, figures, captions, headers/footers, and page flow.
+- If the final output is DOCX and visual fidelity matters, render or open the original template and final DOCX when feasible. Use LibreOffice/soffice, Word, screenshots, PDF/PNG conversion, or another reliable renderer. If no renderer is available, record that limitation and use the strongest structural inspection possible.
+- Record template mismatches found and fixes made. Do not finish with a major mismatch merely because the output is aesthetically acceptable.
 - If wide appendices or data tables are present, use readable formatting such as landscape pages, smaller but legible fonts, repeated headers, or split tables rather than dropping columns.
 - For DOCX output, check page margins, fonts, heading styles, paragraph spacing, table readability, caption consistency, visible sub-question separation, and formula rendering.
 - Confirm `output/` contains final files only.
@@ -408,6 +421,8 @@ Common mistakes:
 - Leaving temporary files in `output/`.
 - Missing captions or inconsistent numbering.
 - Passing checks without a prompt/meta leakage scan.
+- Passing a template-backed report without a high-effort template-fidelity comparison.
+- Treating "pretty" as equivalent to "matches the template."
 - Allowing appendices or logs to become less detailed than the template/reference without recording a user-approved reason.
 - Overusing bullets because the draft used bullets, even when paragraph prose would be clearer.
 
